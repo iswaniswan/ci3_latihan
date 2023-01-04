@@ -85,10 +85,11 @@ class Pembelian extends CI_Controller {
 	public function read($id) 
 	{
 		$this->load->model('ModelPembelian');
-		$data = $this->ModelPembelian->getAllWithDetail($id);
+
+		$data = $this->ModelPembelian->getAllWithDetail($id)[0];
 
 		$this->load->view('pembelian/read', [
-			'data' => $data
+			'data' => $data,
 		]);
 	}
 
@@ -99,23 +100,38 @@ class Pembelian extends CI_Controller {
 		// action  post submit
 		$post = $this->input->post();
 		if ($post != null) {
+//			var_dump($post); die();
 			$params = [
 				'id' => @$post['id'],
-				'kode' => @$post['kode'],
-				'nama' => @$post['nama']
+				'tanggal' => @$post['tanggal'],
+				'id_supplier' => @$post['id_supplier'],
+				'id_barang' => @$post['id_barang'],
+				'harga' => @$post['harga'],
+				'qty' => @$post['qty'],
+				'keterangan' => @$post['keterangan']
 			];
 						
 			if ($this->ModelPembelian->update($params)) {
-				redirect('pembelian/index');
+				$this->load->model('ModelPembelianDetail');
+				$params['id_pembelian'] = @$post['id'];
+				if ($this->ModelPembelianDetail->update($params)) {
+					redirect('pembelian/index');
+				}
+				echo 'error Pembelian detail';
 			} else {
 				echo 'error';
 			}
-		}	
+		}
 
-		$data = $this->ModelPembelian->read($id);
+		$data = $this->ModelPembelian->getAllWithDetail($id)[0];
+
+		$allSupplier = $this->getAllSupplier();
+		$allBarang = $this->getAllBarang();
 
 		$this->load->view('pembelian/update', [
-			'data' => $data
+			'data' => $data,
+			'allSupplier' => $allSupplier,
+			'allBarang' => $allBarang
 		]);
 	}
 
@@ -124,6 +140,9 @@ class Pembelian extends CI_Controller {
 		if ($id != null) {
 			$this->load->model('ModelPembelian');
 			if ($this->ModelPembelian->delete($id)) {
+				// delete pembelian detail
+				$this->load->model('ModelPembelianDetail');
+				$this->ModelPembelianDetail->deleteBy('id_pembelian', $id);
 				redirect ('pembelian/index');
 			} else {
 				echo 'Error';

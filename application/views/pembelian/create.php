@@ -35,7 +35,6 @@
                             </select>
                         </div>
 
-
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="inputGroupSelect01">Barang</label>
                             <select class="form-select" name="id_barang">

@@ -15,23 +15,53 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        Form Update Supplier
+                        Form Update Pembelian
                     </h3>
                 </div>
-                <div class="card-body">
-                    <form method="POST" action="<?= site_url('supplier/update') ?>">
-                        <div class="mb-3">
-                            <label class="form-label">Kode</label>
-                            <input type="text" class="form-control" value="<?= $data['kode'] ?>" name="kode">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nama</label>
-                            <input type="text" class="form-control" value="<?= $data['nama'] ?>" name="nama">
-                        </div>
-                        <input type="hidden" value="<?= $data['id'] ?>" name="id">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
+				<div class="card-body">
+					<form method="POST" action="<?= site_url('pembelian/update') ?>">
+						<div class="mb-3">
+							<label class="form-label">Tanggal</label>
+							<input type="text" class="form-control" name="tanggal" value="<?= $data['tanggal'] ?>" >
+						</div>
+						<div class="input-group mb-3">
+							<label class="input-group-text" for="inputGroupSelect01">Supplier</label>
+							<select class="form-select" name="id_supplier">
+								<option>- Pilih -</option>
+								<?php $selected = false; ?>
+								<?php foreach ($allSupplier as $supplier) { ?>
+									<?php if ($supplier['id'] == $data['id_supplier']) $selected = 'selected'; ?>
+									<option value="<?= $supplier['id'] ?>" <?= $selected ?>><?= $supplier['nama'] ?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="input-group mb-3">
+							<label class="input-group-text" for="inputGroupSelect01">Barang</label>
+							<select class="form-select" name="id_barang">
+								<option>- Pilih -</option>
+								<?php $selected = false; ?>
+								<?php foreach ($allBarang as $barang) { ?>
+									<?php if ($barang['id'] == $data['id_barang']) $selected = 'selected'; ?>
+									<option value="<?= $barang['id'] ?>" <?= $selected ?>><?= $barang['nama'] ?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="mb-3">
+							<label class="form-label">Harga</label>
+							<input type="text" class="form-control" name="harga" value="<?= $data['harga'] ?>" >
+						</div>
+						<div class="mb-3">
+							<label class="form-label">Quantity</label>
+							<input type="text" class="form-control" name="qty" value="<?= $data['qty'] ?>" >
+						</div>
+						<div class="mb-3">
+							<label class="form-label">Keterangan</label>
+							<input type="text" class="form-control" name="keterangan" value="<?= $data['keterangan'] ?>" >
+						</div>
+						<input type="hidden" value="<?= $data['id'] ?>" name="id">
+					 	<button type="submit" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
             </div>
         </div>
     </div>

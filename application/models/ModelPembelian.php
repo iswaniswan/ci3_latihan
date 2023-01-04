@@ -23,7 +23,7 @@ class ModelPembelian extends CI_Model{
             $where = " WHERE $this->tableName.id=$id ";
         }
 
-        $select = "$this->tableName.id, tanggal, id_barang, b.nama, id_supplier, s.nama as nama_supplier, harga, qty, keterangan";
+        $select = "$this->tableName.id, tanggal, id_barang, b.nama as nama_barang, id_supplier, s.nama as nama_supplier, harga, qty, keterangan";
 
         $query = $this->db->query("SELECT $select FROM $this->tableName $join $where");
         return $query->result_array();
@@ -53,7 +53,8 @@ class ModelPembelian extends CI_Model{
     {
         $data = array(
             'tanggal' => @$params['tanggal'],
-            'id_barang' => @$params['id_barang']
+            'id_supplier' => @$params['id_supplier'],
+			'keterangan' => @$params['keterangan']
         );
     
         $this->db->where('id', @$params['id']);

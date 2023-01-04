@@ -18,29 +18,33 @@
                         Detail Pembelian
                     </h3>
                 </div>
-                <?php var_dump ($data) ?>
+                <?php// var_dump ($data) ?>
                 <div class="card-body">
                     <form method="POST" action="<?= site_url('barang/create') ?>">
                         <div class="mb-3">
                             <label class="form-label">Tanggal</label>
-                            <input type="text" class="form-control" name="kode" value="<?= $data['tanggal'] ?>" disabled>
+                            <input type="text" class="form-control" name="tanggal" value="<?= $data['tanggal'] ?>" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Supplier</label>
-                            <input type="text" class="form-control" name="nama" value="<?= $data['id_supplier'] ?>" disabled>
+                            <input type="text" class="form-control" name="id_supplier" value="<?= $data['nama_supplier'] ?>" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Barang</label>
-                            <input type="text" class="form-control" name="nama" value="<?= $data['id_barang'] ?>" disabled>
+                            <input type="text" class="form-control" name="id_barang" value="<?= $data['nama_barang'] ?>" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Harga</label>
-                            <input type="text" class="form-control" name="nama" value="<?= $data['harga'] ?>" disabled>
+                            <input type="text" class="form-control" name="harga" value="<?= $data['harga'] ?>" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Quantity</label>
-                            <input type="text" class="form-control" name="nama" value="<?= $data['qty'] ?>" disabled>
+                            <input type="text" class="form-control" name="qty" value="<?= $data['qty'] ?>" disabled>
                         </div>
+						<div class="mb-3">
+							<label class="form-label">Keterangan</label>
+							<input type="text" class="form-control" name="keterangan" value="<?= $data['keterangan'] ?>" disabled>
+						</div>
                         <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
                     </form>
                 </div>

@@ -7,9 +7,23 @@ class ModelSupplier extends CI_Model{
     public $tableName = 'supplier';
 
     public function getAll(){
-        $data = $this->db->query("SELECT * FROM $this->tableName");
-        return $data->result_array();
+        $query = $this->db->query("SELECT * FROM $this->tableName");
+        return $query->result_array();
     }
+
+	public function get($select='*', $join='', $where='', $limit='')
+	{
+		if ($where != '') {
+			$where = ' WHERE '.$where;
+		}
+
+		if ($limit != '') {
+			$limit = ' LIMIT '.$limit;
+		}
+
+		$query = $this->db->query("SELECT $select FROM $this->tableName $join $where $limit");
+		return $query->result_array();
+	}
 
     public function create($params)
     {
@@ -48,6 +62,13 @@ class ModelSupplier extends CI_Model{
 
         return ($this->db->affected_rows() != 1) ? false : true;
     }
+
+	public static function getById($id=null, $key=null)
+	{
+		$where = "id=$id";
+		$query = self::get('', '', $where, '');
+		return $query[0][$key];
+	}
 
 }
 

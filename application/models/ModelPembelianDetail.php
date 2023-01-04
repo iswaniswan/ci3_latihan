@@ -34,11 +34,13 @@ class ModelPembelianDetail extends CI_Model{
     public function update($params)
     {
         $data = array(
-            'tanggal' => @$params['tanggal'],
-            'id_barang' => @$params['id_barang']
+			'id_pembelian' => @$params['id_pembelian'],
+            'id_barang' => @$params['id_barang'],
+			'harga' => @$params['harga'],
+			'qty' => @$params['qty']
         );
     
-        $this->db->where('id', @$params['id']);
+        $this->db->where('id_pembelian', @$params['id_pembelian']);
         $this->db->update($this->tableName, $data);
 
         return ($this->db->affected_rows() != 1) ? false : true;
@@ -51,6 +53,14 @@ class ModelPembelianDetail extends CI_Model{
 
         return ($this->db->affected_rows() != 1) ? false : true;
     }
+
+	public function deleteBy($key, $value)
+	{
+		$this->db->where($key, $value);
+		$this->db->delete($this->tableName);
+
+		return ($this->db->affected_rows() != 1) ? false : true;
+	}
 
 }
 
