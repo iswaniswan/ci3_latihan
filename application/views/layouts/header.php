@@ -7,10 +7,12 @@
     <link rel="stylesheet" href="<?= base_url('public/assets/css/bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('public/assets/css/bootstrap-icons.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('public/assets/css/bootstrap-toggle.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('public/assets/css/select2.min.css') ?>">
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
     <script src="<?= base_url('public/assets/js/jquery-3.6.3.min.js') ?>"></script>	
 	<script src="<?= base_url('public/assets/js/bootstrap.min.js') ?>"></script>
 	<script src="<?= base_url('public/assets/js/bootstrap-toggle.min.js') ?>"></script>
+    <script src="<?= base_url('public/assets/js/select2.min.js') ?>"></script>  
 
     <title>App</title>
 </head>

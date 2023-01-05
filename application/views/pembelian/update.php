@@ -167,7 +167,7 @@
 	}
 
 	$(document).ready(function() {
-		$('select').select2();
+		$('select').select2();		
 
 		$('input.currency-input').each(function() {
 			formatToCurrency(this);
