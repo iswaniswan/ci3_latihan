@@ -5,8 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= base_url('public/assets/css/bootstrap.min.css') ?>">
+	<link rel="stylesheet" href="<?= base_url('public/assets/css/bootstrap-toggle.min.css') ?>">
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
-    <script src="<?= base_url('public/assets/js/bootstrap.min.js') ?>"></script>
+    <script src="<?= base_url('public/assets/js/jquery-3.6.3.min.js') ?>"></script>	
+	<script src="<?= base_url('public/assets/js/bootstrap.min.js') ?>"></script>
+	<script src="<?= base_url('public/assets/js/bootstrap-toggle.min.js') ?>"></script>
+
     <title>Index</title>
 </head>
 <body class="p-4">
@@ -45,6 +49,7 @@
 								<th scope="col">Kode</th>
 								<th scope="col">Nama</th>
 								<th scope="col">Action</th>
+								<th scope="col">Status</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -56,9 +61,19 @@
 										<td>
 											<div class="container">
 												<a href="<?= site_url('barang/read/'.$barang['id']) ?>" class="btn btn-sm btn-success">Lihat</a>
-												<a href="<?= site_url('barang/update/'.$barang['id']) ?>" class="btn btn-sm btn-warning">Edit</a>
-												<a href="<?= site_url('barang/delete/'.$barang['id']) ?>" class="btn btn-sm btn-danger">Hapus</a>
+												<a href="<?= site_url('barang/update/'.$barang['id']) ?>" class="btn btn-sm btn-warning">Edit</a>												
 											</div>
+										</td>
+										<td>
+											<?php $checked = $barang['status'] == 't' ? 'checked' : ''; ?>
+											<input type="checkbox" name="status"
+												class="bootstrap-toggle" <?= $checked ?> 
+												data-toggle="toggle" 
+												data-size="small" 
+												data-on="Active" 
+												data-off="Inactive" 
+												data-onstyle="info"
+												data-id="<?= $barang['id'] ?>">
 										</td>
 									</tr>
 								<?php } ?>
@@ -70,4 +85,30 @@
 		</div>
     </div>
 </body>
+<script>
+	$(function() {
+		$('.bootstrap-toggle').bootstrapToggle();
+
+		$('.bootstrap-toggle').each(function() {
+			$(this).change(function() {
+				const status = $(this).prop('checked');
+				const id = $(this).data('id');
+				console.log(id, status);
+				$.ajax({
+					'url': "<?= site_url('barang/updateStatus') ?>",
+					'method': 'POST',
+					'data': {
+						id: id,
+						status:status
+					},
+					success: function(result){
+						if (result === 'success') {
+							location.reload();
+						}
+					}
+				})
+			})
+		})
+	})
+</script>
 </html>

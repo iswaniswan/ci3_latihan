@@ -7,7 +7,7 @@ class ModelSupplier extends CI_Model{
     public $tableName = 'supplier';
 
     public function getAll(){
-        $query = $this->db->query("SELECT * FROM $this->tableName");
+        $query = $this->db->query("SELECT * FROM $this->tableName ORDER BY id ASC");
         return $query->result_array();
     }
 
@@ -44,10 +44,17 @@ class ModelSupplier extends CI_Model{
 
     public function update($params)
     {
-        $data = array(
-            'kode' => @$params['kode'],
-            'nama' => @$params['nama']
-        );
+        $data = array();
+
+        if(@$params['kode']) {
+            $data['kode'] = $params['kode'];
+        }            
+        if(@$params['nama']) {
+            $data['nama'] = $params['nama'];
+        }            
+        if(@$params['status']) {
+            $data['status'] = $params['status'];
+        }           
     
         $this->db->where('id', @$params['id']);
         $this->db->update($this->tableName, $data);

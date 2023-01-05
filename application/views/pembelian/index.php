@@ -43,7 +43,8 @@
 								<tr>
 								<th scope="col">#</th>
 								<th scope="col">Tanggal</th>
-								<th scope="col">Barang</th>
+								<th scope="col">Supplier</th>
+								<th scope="col">Keterangan</th>
 								<th scope="col">Action</th>
 								</tr>
 							</thead>
@@ -53,7 +54,8 @@
 									<tr>
 										<td><?= $no++ ?></td>
 										<td><?= $pembelian['tanggal'] ?></td>
-										<td><?= $pembelian['nama_barang'] ?></td>
+										<td><?= $pembelian['nama_supplier'] ?></td>
+										<td><?= $pembelian['keterangan'] ?></td>
 										<td>
 											<div class="container">
 												<a href="<?= site_url('pembelian/read/'.$pembelian['id']) ?>" class="btn btn-sm btn-success">Lihat</a>

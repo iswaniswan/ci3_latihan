@@ -8,7 +8,7 @@ class ModelBarang extends CI_Model{
 
     public function getAll()
     {
-        $query = $this->db->query("SELECT * FROM $this->tableName");
+        $query = $this->db->query("SELECT * FROM $this->tableName ORDER BY id ASC");
         return $query->result_array();
     }
 
@@ -31,13 +31,23 @@ class ModelBarang extends CI_Model{
 
     public function update($params)
     {
-        $data = array(
-            'kode' => @$params['kode'],
-            'nama' => @$params['nama']
-        );
+        $data = array();
+
+        if(@$params['kode']) {
+            $data['kode'] = $params['kode'];
+        }            
+        if(@$params['nama']) {
+            $data['nama'] = $params['nama'];
+        }            
+        if(@$params['status']) {
+            $data['status'] = $params['status'];
+        }            
     
         $this->db->where('id', @$params['id']);
         $this->db->update($this->tableName, $data);
+
+        // var_dump(print_r($this->db->last_query()));
+        // die();
 
         return ($this->db->affected_rows() != 1) ? false : true;
     }

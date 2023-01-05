@@ -6,6 +6,16 @@ class ModelPembelianDetail extends CI_Model{
 
     public $tableName = 'pembelian_detail';
 
+    public function get($select='', $join='', $where='', $limit='', $order=' ORDER BY id ASC'){         
+        if ($select == '') {
+            $select = '*';
+        }
+
+        $sql = "SELECT $select FROM $this->tableName $join $where $limit $order";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
     public function getAll(){        
         $query = $this->db->query("SELECT * FROM $this->tableName");
 
@@ -33,14 +43,22 @@ class ModelPembelianDetail extends CI_Model{
 
     public function update($params)
     {
-        $data = array(
-			'id_pembelian' => @$params['id_pembelian'],
-            'id_barang' => @$params['id_barang'],
-			'harga' => @$params['harga'],
-			'qty' => @$params['qty']
-        );
+        $data = array();
+
+        if (@$params['id_pembelian']) {
+            $data['id_pembelian'] = $params['id_pembelian'];
+        }            
+        if (@$params['id_barang']) {
+            $data['id_barang'] = $params['id_barang'];
+        }            
+        if (@$params['harga']) {
+            $data['harga'] = $params['harga'];
+        }            
+        if (@$params['qty']) {
+            $data['qty'] = $params['qty'];
+        }            
     
-        $this->db->where('id_pembelian', @$params['id_pembelian']);
+        $this->db->where('id', @$params['id']);
         $this->db->update($this->tableName, $data);
 
         return ($this->db->affected_rows() != 1) ? false : true;

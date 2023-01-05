@@ -22,7 +22,7 @@ class Pembelian extends CI_Controller {
 	{
 		$this->load->model('ModelPembelian');
 		
-		$allPembelian = $this->ModelPembelian->getAllWithDetail();
+		$allPembelian = $this->ModelPembelian->getAll();
 
 		$this->load->view('pembelian/index', [
 			'allPembelian' => $allPembelian
@@ -33,12 +33,11 @@ class Pembelian extends CI_Controller {
 	{
 		$post = $this->input->post();
 		if ($post != null) {
+			// var_dump($post['items']);
+			// pembelian header
 			$params = [
 				'tanggal' => @$post['tanggal'],
 				'id_supplier' => @$post['id_supplier'],
-				'id_barang' => @$post['id_barang'],
-				'harga' => @$post['harga'],
-				'qty' => @$post['qty'],
 				'keterangan' => @$post['keterangan']
 			];
 			
@@ -46,14 +45,30 @@ class Pembelian extends CI_Controller {
 			
 			$last_id_inserted = $this->ModelPembelian->create($params);
 
-			if ($last_id_inserted >= 0) {				
-				//insert into pembelian_detail
+			if ($last_id_inserted >= 0) {						
 				$this->load->model('ModelPembelianDetail');
-				$params['id_pembelian'] = $last_id_inserted;
-				if ($this->ModelPembelianDetail->create($params)) {
-					redirect('pembelian/index');
-				}				
-				echo 'error Pembelian detail';
+				// pembelian_detail
+				$success = true;
+				foreach (@$post['items'] as $item) {
+					$data = [
+						'id_barang' => $item['id_barang'],
+						'harga' => $item['harga'],
+						'qty' => $item['qty'],
+					];
+					
+					$data['id_pembelian'] = $last_id_inserted;
+					if (!$this->ModelPembelianDetail->create($data)) {					
+						$success = false;
+					}					// echo '<pre>'; var_dump($params['qty']); echo '</pre>';
+				}
+				
+				if ($success) {
+					// return redirect('pembelian/read/'.$last_id_inserted);
+					return redirect('pembelian/index');
+				} else {
+					die ('error pembelian detail');
+				}
+
 			} else {
 				echo 'error Pembelian';
 			}
@@ -85,39 +100,60 @@ class Pembelian extends CI_Controller {
 	public function read($id) 
 	{
 		$this->load->model('ModelPembelian');
+		$this->load->model('ModelPembelianDetail');
 
 		$data = $this->ModelPembelian->getAllWithDetail($id)[0];
 
+		$where = " WHERE id_pembelian=".$data['id'];
+		$items = $this->ModelPembelianDetail->get('', '', $where, '', '');
+
+		$allBarang = $this->getAllBarang();
+
 		$this->load->view('pembelian/read', [
 			'data' => $data,
+			'items' => $items,
+			'allBarang' => $allBarang
 		]);
 	}
 
 	public function update($id=null)
 	{
 		$this->load->model('ModelPembelian');
+		$this->load->model('ModelPembelianDetail');
 
 		// action  post submit
 		$post = $this->input->post();
 		if ($post != null) {
-//			var_dump($post); die();
+			// echo '<pre>'; var_dump($post); echo '</pre>'; die();			
 			$params = [
 				'id' => @$post['id'],
 				'tanggal' => @$post['tanggal'],
 				'id_supplier' => @$post['id_supplier'],
-				'id_barang' => @$post['id_barang'],
-				'harga' => @$post['harga'],
-				'qty' => @$post['qty'],
 				'keterangan' => @$post['keterangan']
 			];
 						
 			if ($this->ModelPembelian->update($params)) {
 				$this->load->model('ModelPembelianDetail');
-				$params['id_pembelian'] = @$post['id'];
-				if ($this->ModelPembelianDetail->update($params)) {
-					redirect('pembelian/index');
+				foreach (@$post['items'] as $item) {
+					$data = [
+						'id_barang' => $item['id_barang'],
+						'harga' => $item['harga'],
+						'qty' => $item['qty'],
+					];
+
+					if (@$item['id'] != null) {
+						//update pembelian detail
+						$data['id'] = $item['id'];
+						$this->ModelPembelianDetail->update($data);
+					} else {
+						$data['id_pembelian'] = $post['id'];
+						$this->ModelPembelianDetail->create($data);						//create pembelian detail
+					}					
+					// echo '<pre>'; var_dump($params['qty']); echo '</pre>';
 				}
-				echo 'error Pembelian detail';
+				
+				redirect('pembelian/read/'.$post['id']);
+
 			} else {
 				echo 'error';
 			}
@@ -125,11 +161,15 @@ class Pembelian extends CI_Controller {
 
 		$data = $this->ModelPembelian->getAllWithDetail($id)[0];
 
+		$where = " WHERE id_pembelian=".$data['id'];
+		$items = $this->ModelPembelianDetail->get('', '', $where, '', '');
+
 		$allSupplier = $this->getAllSupplier();
 		$allBarang = $this->getAllBarang();
 
 		$this->load->view('pembelian/update', [
 			'data' => $data,
+			'items' => $items,
 			'allSupplier' => $allSupplier,
 			'allBarang' => $allBarang
 		]);

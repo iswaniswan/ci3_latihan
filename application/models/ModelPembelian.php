@@ -8,7 +8,9 @@ class ModelPembelian extends CI_Model{
 
     public function getAll()
     {
-        $query = $this->db->query("SELECT * FROM $this->tableName");
+        $join = "INNER JOIN supplier s ON s.id=$this->tableName.id_supplier::integer ";
+        $select = "$this->tableName.id, tanggal, keterangan, s.nama as nama_supplier";
+        $query = $this->db->query("SELECT $select FROM $this->tableName $join ORDER BY id ASC");
         return $query->result_array();
     }
 
@@ -25,7 +27,7 @@ class ModelPembelian extends CI_Model{
 
         $select = "$this->tableName.id, tanggal, id_barang, b.nama as nama_barang, id_supplier, s.nama as nama_supplier, harga, qty, keterangan";
 
-        $query = $this->db->query("SELECT $select FROM $this->tableName $join $where");
+        $query = $this->db->query("SELECT $select FROM $this->tableName $join $where ORDER BY id ASC");
         return $query->result_array();
     }
 

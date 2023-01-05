@@ -28,8 +28,23 @@
                             <label class="form-label">Nama</label>
                             <input type="text" class="form-control" value="<?= $data['nama'] ?>" name="nama">
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <?php $checked = $data['status'] == 't' ? 'checked' : ''; ?>
+                            <input type="checkbox" name="status"
+												class="bootstrap-toggle" <?= $checked ?> 
+												data-toggle="toggle" 
+												data-size="small" 
+												data-on="Active" 
+												data-off="Inactive" 
+												data-onstyle="info"
+												data-id="<?= $data['id'] ?>">
+                        </div>
                         <input type="hidden" value="<?= $data['id'] ?>" name="id">
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="<?= site_url('barang/index') ?>" class="btn btn-dark">
+                            Kembali
+                        </a> 
                     </form>
                 </div>
             </div>

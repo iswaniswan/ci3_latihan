@@ -19,7 +19,7 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="<?= site_url('barang/create') ?>">
+                    <form method="POST">
                         <div class="mb-3">
                             <label class="form-label">Kode</label>
                             <input type="text" class="form-control" name="kode" value="<?= $data['kode'] ?>" disabled>
@@ -28,7 +28,22 @@
                             <label class="form-label">Nama</label>
                             <input type="text" class="form-control" name="nama" value="<?= $data['nama'] ?>" disabled>
                         </div>
-                        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <?php $checked = $data['status'] == 't' ? 'checked' : ''; ?>
+                            <input type="checkbox" 
+												class="bootstrap-toggle" <?= $checked ?> 
+												data-toggle="toggle" 
+												data-size="small" 
+												data-on="Active" 
+												data-off="Inactive" 
+												data-onstyle="info"
+												data-id="<?= $data['id'] ?>"
+                                                disabled>
+                        </div>
+                        <a href="<?= site_url('supplier/index') ?>" class="btn btn-dark">
+                            Kembali
+                        </a>  
                     </form>
                 </div>
             </div>

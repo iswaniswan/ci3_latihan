@@ -66,10 +66,15 @@ class Supplier extends CI_Controller {
 		// action  post submit
 		$post = $this->input->post();
 		if ($post != null) {
+			$status = 'false';
+			if (@$post['status'] == 'on') {
+				$status = true;
+			}
 			$params = [
 				'id' => @$post['id'],
 				'kode' => @$post['kode'],
-				'nama' => @$post['nama']
+				'nama' => @$post['nama'],
+				'status' => $status
 			];
 						
 			if ($this->ModelSupplier->update($params)) {
@@ -96,5 +101,22 @@ class Supplier extends CI_Controller {
 				echo 'Error';
 			}
 		}		
+	}
+
+	public function updateStatus()
+	{
+		$post = $this->input->post();
+		if ($post != null) {
+			$this->load->model('ModelSupplier');
+			$params = [
+				'id' => @$post['id'],
+				'status'=> @$post['status']
+			];
+			$this->ModelSupplier->update($params);
+			echo 'success';			
+		} else {
+			echo 'error';
+		}
+		
 	}
 }

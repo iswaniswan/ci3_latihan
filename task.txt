@@ -1,0 +1,5 @@
+2023-05-01
+
+- tambah kolom status (bool) default true di table barang, supplier.
+- toggle aktif/non aktif untuk status.
+- 1 header bisa multiple item/detail
