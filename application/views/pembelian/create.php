@@ -18,9 +18,9 @@
             <form method="POST" action="<?= site_url('pembelian/create') ?>">
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h3 class="card-title">
+                        <h5 class="card-title">
                             Form Pembelian
-                        </h3>
+                        </h5>
                     </div>
                     <div class="card-body">                        
                         <div class="mb-3">
@@ -49,14 +49,14 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Daftar Item</h3>
+                        <h5 class="card-title">Daftar Item</h5>
                     </div>
                     <div class="card-body">
                         <div class="col-12 mb-4">
                             <a href="#" onclick="addItem()" class="btn btn-success">Add Item</a>
                         </div>
                         <?php $index = 1; ?>
-                        <table class="table table-hover">
+                        <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>No</th>

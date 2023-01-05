@@ -1,19 +1,20 @@
-
 <div class="row">
 	<div class="container">
 		<div class="card">
-			<div class="card-header">
-				<h3 class="card-title text-primary">
+			<div class="card-header bg-light mb-2">
+				<h5 class="card-title mt-2">
 					Daftar Barang
-				</h3>
+				</h5>
 			</div>
 			<div class="card-body">
-				<div class="col-12 mb-4">
-					<a href="<?= site_url('barang/create') ?>" class="btn btn-primary">Add</a>
+				<div class="col-12 mb-5">
+					<a href="<?= site_url('barang/create') ?>" class="btn btn-primary">
+						<i class="bi-plus me-2"></i>Tambah
+					</a>					
 				</div>
 				<div class="col-12">
 					<?php $no = 1; ?>
-					<table class="table table-hover">
+					<table class="table table-bordered table-hover">
 						<thead>
 							<tr>
 							<th scope="col">#</th>
@@ -31,8 +32,8 @@
 									<td><?= $barang['nama'] ?></td>
 									<td>
 										<div class="container">
-											<a href="<?= site_url('barang/read/'.$barang['id']) ?>" class="btn btn-sm btn-success">Lihat</a>
-											<a href="<?= site_url('barang/update/'.$barang['id']) ?>" class="btn btn-sm btn-warning">Edit</a>												
+											<a href="<?= site_url('barang/read/'.$barang['id']) ?>" class="btn btn-sm btn-success"><i class="bi-eye"></i></a>
+											<a href="<?= site_url('barang/update/'.$barang['id']) ?>" class="btn btn-sm btn-warning"><i class="bi-pencil"></i></a>												
 										</div>
 									</td>
 									<td>
@@ -55,3 +56,30 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	$(function() {
+		$('.bootstrap-toggle').bootstrapToggle();
+
+		$('.bootstrap-toggle').each(function() {
+			$(this).change(function() {
+				const status = $(this).prop('checked');
+				const id = $(this).data('id');
+				console.log(id, status);
+				$.ajax({
+					'url': "<?= site_url('barang/updateStatus') ?>",
+					'method': 'POST',
+					'data': {
+						id: id,
+						status:status
+					},
+					success: function(result){
+						if (result === 'success') {
+							location.reload();
+						}
+					}
+				})
+			})
+		})
+	})
+</script>

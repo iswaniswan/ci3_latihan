@@ -24,7 +24,7 @@ class Supplier extends CI_Controller {
 
 		$allSupplier = $this->ModelSupplier->getAll();
 
-		$this->load->view('supplier/index', [
+		$this->render('supplier/index', [
 			'allSupplier' => $allSupplier
 		]);
 	}
@@ -46,7 +46,7 @@ class Supplier extends CI_Controller {
 			}
 		}
 
-		$this->load->view('supplier/create');
+		$this->render('supplier/create');
 	}
 
 	public function read($id) 
@@ -54,7 +54,7 @@ class Supplier extends CI_Controller {
 		$this->load->model('ModelSupplier');
 		$data = $this->ModelSupplier->read($id);
 
-		$this->load->view('supplier/read', [
+		$this->render('supplier/read', [
 			'data' => $data
 		]);
 	}
@@ -86,7 +86,7 @@ class Supplier extends CI_Controller {
 
 		$data = $this->ModelSupplier->read($id);
 
-		$this->load->view('supplier/update', [
+		$this->render('supplier/update', [
 			'data' => $data
 		]);
 	}
@@ -118,5 +118,17 @@ class Supplier extends CI_Controller {
 			echo 'error';
 		}
 		
+	}
+
+	protected function render($view, $data=[])
+	{
+		$active = 'supplier';
+
+		$this->load->view('layouts/header');
+		$this->load->view('layouts/menu', [
+			'active' => $active
+		]);
+		$this->load->view($view, $data);
+		$this->load->view('layouts/footer');
 	}
 }

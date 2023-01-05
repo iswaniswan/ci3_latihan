@@ -24,7 +24,7 @@ class Pembelian extends CI_Controller {
 		
 		$allPembelian = $this->ModelPembelian->getAll();
 
-		$this->load->view('pembelian/index', [
+		$this->render('pembelian/index', [
 			'allPembelian' => $allPembelian
 		]);
 	}
@@ -77,7 +77,7 @@ class Pembelian extends CI_Controller {
 		$allSupplier = $this->getAllSupplier();
 		$allBarang = $this->getAllBarang();
 
-		$this->load->view('pembelian/create', [
+		$this->render('pembelian/create', [
 			'allSupplier' => $allSupplier,
 			'allBarang' => $allBarang
 		]);
@@ -109,7 +109,7 @@ class Pembelian extends CI_Controller {
 
 		$allBarang = $this->getAllBarang();
 
-		$this->load->view('pembelian/read', [
+		$this->render('pembelian/read', [
 			'data' => $data,
 			'items' => $items,
 			'allBarang' => $allBarang
@@ -169,7 +169,7 @@ class Pembelian extends CI_Controller {
 		$allSupplier = $this->getAllSupplier();
 		$allBarang = $this->getAllBarang();
 
-		$this->load->view('pembelian/update', [
+		$this->render('pembelian/update', [
 			'data' => $data,
 			'items' => $items,
 			'allSupplier' => $allSupplier,
@@ -190,6 +190,18 @@ class Pembelian extends CI_Controller {
 				echo 'Error';
 			}
 		}		
+	}
+
+	protected function render($view, $data=[])
+	{
+		$active = 'pembelian';
+
+		$this->load->view('layouts/header');
+		$this->load->view('layouts/menu', [
+			'active' => $active
+		]);
+		$this->load->view($view, $data);
+		$this->load->view('layouts/footer');
 	}
 
 }

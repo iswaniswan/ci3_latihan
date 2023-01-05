@@ -49,7 +49,7 @@ class Barang extends CI_Controller {
 			}
 		}
 
-		$this->load->view('barang/create');
+		$this->render('barang/create');
 	}
 
 	public function read($id) 
@@ -57,7 +57,7 @@ class Barang extends CI_Controller {
 		$this->load->model('ModelBarang');
 		$data = $this->ModelBarang->read($id);
 
-		$this->load->view('barang/read', [
+		$this->render('barang/read', [
 			'data' => $data
 		]);
 	}
@@ -90,7 +90,7 @@ class Barang extends CI_Controller {
 
 		$data = $this->ModelBarang->read($id);
 
-		$this->load->view('barang/update', [
+		$this->render('barang/update', [
 			'data' => $data
 		]);
 	}
@@ -124,7 +124,7 @@ class Barang extends CI_Controller {
 		
 	}
 
-	protected function render($view, $data)
+	protected function render($view, $data=[])
 	{
 		$active = 'barang';
 		

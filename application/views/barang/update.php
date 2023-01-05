@@ -14,9 +14,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">
+                    <h5 class="card-title">
                         Form Update Barang
-                    </h3>
+                    </h5>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="<?= site_url('barang/update') ?>">
@@ -31,14 +31,7 @@
                         <div class="mb-3">
                             <label class="form-label">Status</label>
                             <?php $checked = $data['status'] == 't' ? 'checked' : ''; ?>
-                            <input type="checkbox" name="status"
-												class="bootstrap-toggle" <?= $checked ?> 
-												data-toggle="toggle" 
-												data-size="small" 
-												data-on="Active" 
-												data-off="Inactive" 
-												data-onstyle="info"
-												data-id="<?= $data['id'] ?>">
+							<input type="checkbox" class="form-check-input mt-1" name="status" <?= $checked ?> data-id="<?= $data['id'] ?>">
                         </div>
                         <input type="hidden" value="<?= $data['id'] ?>" name="id">
                         <button type="submit" class="btn btn-primary">Submit</button>

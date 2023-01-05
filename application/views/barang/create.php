@@ -14,9 +14,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">
+                    <h5 class="card-title">
                         Form Barang
-                    </h3>
+                    </h5>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="<?= site_url('barang/create') ?>">
