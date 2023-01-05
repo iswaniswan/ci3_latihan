@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= base_url('public/assets/css/bootstrap.min.css') ?>">
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+    <script src="<?= base_url('public/assets/js/jquery-3.6.3.min.js') ?>"></script>	
     <script src="<?= base_url('public/assets/js/bootstrap.min.js') ?>"></script>    
     <title>Read</title>
 </head>
@@ -42,28 +43,39 @@
                         <h3 class="card-title">Daftar Item</h3>                        
                     </div>
                     <div class="card-body">
-                        <?php foreach ($items as $item) { ?>
-                            <div class="row item">
-                                <div class="col mb-3">
-                                    <label class="form-label">Barang</label>
-                                    <select class="form-select" name="id_barang" disabled>
-                                        <option>- Pilih -</option>
-                                        <?php foreach ($allBarang as $barang) { ?>
-                                            <?php $selected = $barang['id'] == $item['id_barang'] ? 'selected' : ''; ?>
-                                            <option value="<?= $barang['id'] ?>" <?= $selected ?>><?= $barang['nama'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                                <div class="col mb-3">
-                                    <label class="form-label">Harga</label>
-                                    <input type="text" class="form-control" name="harga" value="<?= $item['harga'] ?>" disabled>
-                                </div>
-                                <div class="col mb-3">
-                                    <label class="form-label">Quantity</label>
-                                    <input type="text" class="form-control" name="qty" value="<?= $item['qty'] ?>" disabled>
-                                </div>	
-                        </div>
-                        <?php } ?>                        
+                        <table class="table table-secondary">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Barang</th>
+                                    <th>Harga</th>
+                                    <th>Quantity</th>                               
+                                </tr>
+                            </thead>
+                            <?php $index = 1; ?>
+                            <tbody id="array-item">
+                                <?php foreach ($items as $item) { ?>
+                                    <tr class="item">
+                                        <td><span class="index"><?= $index ?></span></td>
+                                        <td>
+                                            <select class="form-select" name="id_barang" disabled>
+                                                <option>- Pilih -</option>
+                                                <?php foreach ($allBarang as $barang) { ?>
+                                                    <?php $selected = $barang['id'] == $item['id_barang'] ? 'selected' : ''; ?>
+                                                    <option value="<?= $barang['id'] ?>" <?= $selected ?>><?= $barang['nama'] ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control currency-read" name="harga" value="<?= $item['harga'] ?>" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="qty" value="<?= $item['qty'] ?>" disabled>
+                                        </td>
+                                    </tr>
+                                <?php $index++; } ?>   
+                            </tbody>
+                        </table>                     
                     </div>
                 </div>
 
@@ -71,4 +83,22 @@
         </div>
     </div>
 </body>
+
+<script>
+    const formatToCurrency = (e) => {        // return;
+        const value = e.value.replace(/,/g, '');        
+        e.value = parseFloat(value).toLocaleString('en-US', {
+            style: 'decimal',
+            maximumFractionDigits: 2,
+            minimumFractionDigits: 2
+        });
+    }
+
+    $(document).ready(function() {
+        $('input.currency-read').each(function() {
+            formatToCurrency(this);
+        })
+    })
+
+</script>
 </html>

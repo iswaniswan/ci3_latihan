@@ -72,7 +72,7 @@
 											data-size="small" 
 											data-on="Active" 
 											data-off="Inactive" 
-											data-onstyle="info"
+											data-onstyle="success"
 											data-id="<?= $supplier['id'] ?>">
 									</td>
 								</tr>

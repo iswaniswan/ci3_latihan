@@ -33,7 +33,7 @@ class Pembelian extends CI_Controller {
 	{
 		$post = $this->input->post();
 		if ($post != null) {
-			// var_dump($post['items']);
+			// echo '<pre>'; var_dump($post); echo '</pre>'; die();
 			// pembelian header
 			$params = [
 				'tanggal' => @$post['tanggal'],
@@ -123,7 +123,7 @@ class Pembelian extends CI_Controller {
 
 		// action  post submit
 		$post = $this->input->post();
-		if ($post != null) {
+		if ($post != null) {			
 			// echo '<pre>'; var_dump($post); echo '</pre>'; die();			
 			$params = [
 				'id' => @$post['id'],
@@ -134,21 +134,23 @@ class Pembelian extends CI_Controller {
 						
 			if ($this->ModelPembelian->update($params)) {
 				$this->load->model('ModelPembelianDetail');
-				foreach (@$post['items'] as $item) {
+				// delete all item pembelian
+				$this->ModelPembelianDetail->deleteBy('id_pembelian', $post['id']);
+
+				// insert new item detail
+				foreach (@$post['items'] as $item) {	
+					if (intval($item['qty']) <= 0) {
+						continue;
+					}				
 					$data = [
+						'id_pembelian' => $post['id'],
 						'id_barang' => $item['id_barang'],
 						'harga' => $item['harga'],
 						'qty' => $item['qty'],
 					];
-
-					if (@$item['id'] != null) {
-						//update pembelian detail
-						$data['id'] = $item['id'];
-						$this->ModelPembelianDetail->update($data);
-					} else {
-						$data['id_pembelian'] = $post['id'];
-						$this->ModelPembelianDetail->create($data);						//create pembelian detail
-					}					
+					
+					//create pembelian detail
+					$this->ModelPembelianDetail->create($data);
 					// echo '<pre>'; var_dump($params['qty']); echo '</pre>';
 				}
 				

@@ -2,4 +2,6 @@
 
 - tambah kolom status (bool) default true di table barang, supplier.
 - toggle aktif/non aktif untuk status.
-- 1 header bisa multiple item/detail
+- 1 header bisa multiple item/detail.
+- gunakan library select2 untuk pencarian dropdown
+- perbaiki fungsi update

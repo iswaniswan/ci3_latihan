@@ -29,6 +29,7 @@
                             <input type="text" class="form-control" name="nama">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="<?= site_url('barang/index') ?>" class="btn btn-dark">Kembali</a>
                     </form>
                 </div>
             </div>

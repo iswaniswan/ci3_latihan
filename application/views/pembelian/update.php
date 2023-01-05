@@ -5,8 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= base_url('public/assets/css/bootstrap.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('public/assets/css/select2.min.css') ?>">
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
-    <script src="<?= base_url('public/assets/js/bootstrap.min.js') ?>"></script>    
+    <script src="<?= base_url('public/assets/js/jquery-3.6.3.min.js') ?>"></script>	
+    <script src="<?= base_url('public/assets/js/bootstrap.min.js') ?>"></script>      
+    <script src="<?= base_url('public/assets/js/select2.min.js') ?>"></script>  
     <title>Create</title>
 </head>
 <body class="p-4">
@@ -24,8 +27,8 @@
                             <label class="form-label">Tanggal</label>
                             <input type="date" class="form-control" name="tanggal" value="<?= $data['tanggal'] ?>">
                         </div>
-						<div class="input-group mb-3">
-                            <label class="input-group-text" for="inputGroupSelect01">Supplier</label>
+						<div class="mb-3">
+                            <label class="form-label">Supplier</label>
                             <select class="form-select" name="id_supplier">
                                 <option>- Pilih -</option>
                                 <?php foreach ($allSupplier as $supplier) { ?>
@@ -52,35 +55,45 @@
 						<div class="col-12 mb-4">
                             <a href="#" onclick="addItem()" class="btn btn-success">Add Item</a>
                         </div>
-
-						<div id="array-item">
-							<?php $index = 0; ?>
-							<?php foreach ($items as $item) { ?>
-								<div class="row item">
-									<div class="col-1">
-										<button type="button" onclick="deleteMe(this)" class="btn btn-sm btn-danger mt-4">Hapus</button>
-									</div>
-									<input type="hidden" value="<?= $item['id'] ?>" name="items[<?= $index ?>][id]" />
-									<div class="col mb-3">
-										<label class="form-label">Barang</label>
-										<select class="form-select" name="items[<?=$index?>][id_barang]">
-											<option>- Pilih -</option>
-											<?php foreach ($allBarang as $barang) { ?>
-												<?php $selected = $barang['id'] == $item['id_barang'] ? 'selected' : ''; ?>
-												<option value="<?= $barang['id'] ?>" <?= $selected ?>><?= $barang['nama'] ?></option>
-											<?php } ?>
-										</select>
-									</div>
-									<div class="col mb-3">
-										<label class="form-label">Harga</label>
-										<input type="text" class="form-control" name="items[<?=$index?>][harga]" value="<?= $item['harga'] ?>">
-									</div>
-									<div class="col mb-3">
-										<label class="form-label">Quantity</label>
-										<input type="text" class="form-control" name="items[<?=$index?>][qty]" value="<?= $item['qty'] ?>">
-									</div>	
-								</div>
-							<?php $index++; } ?> 
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Barang</th>
+                                        <th>Harga</th>
+                                        <th>Quantity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <?php $index = 1; ?>
+                                <tbody id="array-item">
+                                    <?php foreach ($items as $item) { ?>
+                                        <input type="hidden" value="<?= $item['id'] ?>" name="items[<?= $index ?>][id]" />
+                                        <tr class="item">
+                                            <td><span class="index"><?= $index ?></span></td>
+                                            <td>
+                                                <select class="form-select" name="items[<?=$index?>][id_barang]" required>
+                                                    <option>- Pilih -</option>
+                                                    <?php foreach ($allBarang as $barang) { ?>
+                                                        <?php $selected = $barang['id'] == $item['id_barang'] ? 'selected' : ''; ?>
+                                                        <option value="<?= $barang['id'] ?>" <?= $selected ?>><?= $barang['nama'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="hidden" class="form-control currency-input-value" name="items[<?= $index ?>][harga]">
+                                                <input type="text" class="form-control currency-input" value="<?= $item['harga'] ?>">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" name="items[<?=$index?>][qty]" value="<?= $item['qty'] ?>" required>
+                                            </td>
+                                            <td>
+                                                <button type="button" onclick="deleteMe(this)" class="btn btn-sm btn-danger">Hapus</button>
+                                            </td>
+                                        </tr>
+                                    <?php $index++; } ?>   
+                                </tbody>
+                            </table>   
 						</div>                                            
                     </div>
                 </div>
@@ -92,41 +105,93 @@
 <script type="text/javascript">
     var index = "<?= $index ?>";
     const createItem = () => {        
-        index++;
-        return `<div class="row item">      
-                            <div class="col-1">
-                                <button type="button" onclick="deleteMe(this)" class="btn btn-sm btn-danger mt-4">Hapus</button>
-                            </div>                      
-                            <div class="col mb-3">
-                                <label class="form-label">Barang</label>
-                                <select class="form-select" name="items[${index}][id_barang]">
-                                    <option>- Pilih -</option>
-                                    <?php foreach ($allBarang as $barang) { ?>
-                                        <option value="<?= $barang['id'] ?>"><?= $barang['nama'] ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                            <div class="col mb-3">
-                                <label class="form-label">Harga</label>
-                                <input type="number" class="form-control" min="1" name="items[${index}][harga]">
-                            </div>
-                            <div class="col mb-3">
-                                <label class="form-label">Quantity</label>
-                                <input type="number" class="form-control" min="1" name="items[${index}][qty]">
-                            </div>	
-                        </div>`;
+        // index++;
+        return `<tr class="item">
+                    <td><span class="index">${index}</span></td>
+                    <td>
+                        <select class="form-select" name="items[${index}][id_barang]">
+                            <option>- Pilih -</option>
+                            <?php foreach ($allBarang as $barang) { ?>
+                                <option value="<?= $barang['id'] ?>"><?= $barang['nama'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="hidden" class="form-control currency-input-value" name="items[${index}][harga]">
+                        <input type="text" class="form-control currency-input">                        
+                    </td>
+                    <td>                    
+                        <input type="number" class="form-control" min="1" name="items[${index}][qty]">
+                    </td>
+                    <td>
+                        <button type="button" onclick="deleteMe(this)" class="btn btn-sm btn-danger">Hapus</button>
+                    </td>
+                </tr>   `;
     }
 
     const addItem = () => {
         const newItem = createItem();
-        const wrapper = document.querySelector('#array-item');
-        console.log(wrapper);
-        wrapper.insertAdjacentHTML('afterend', newItem);
+        let wrapper = document.querySelector('#array-item');
+        // console.log(wrapper);
+        // wrapper.insertAdjacentHTML('afterend', newItem);
+        $(wrapper).append(newItem);
+        index++;
+        refreshSelect2();
+        refrechInputCurrency();
     }
 
     const deleteMe = (e) => {
         e.closest('.item').remove();
+        index--;
+        reIndexNumber();
     }
+
+    const reIndexNumber = () => {
+        let start = 1;
+        let elementIndexes = $('#array-item .index');
+        elementIndexes.each(function() {
+            $(this).text(start);
+            start++;
+        })
+    }
+    const refreshSelect2 = () => {
+        $('select').select2();
+    }
+
+    const refrechInputCurrency = () => {
+        $('input.currency-input').each(function() {
+            $(this).on('blur', function() {
+                formatToCurrency(this);
+            })
+        });
+    }
+
+    const formatToCurrency = (e) => {        // return;
+        const value = e.value.replace(/,/g, '');        
+        const valueFormatted = parseFloat(value).toLocaleString('en-US', {
+            style: 'decimal',
+            maximumFractionDigits: 2,
+            minimumFractionDigits: 2
+        });
+
+        console.log(valueFormatted);
+        e.value = valueFormatted;
+
+        const savedValue = valueFormatted.replace(/,/g, '').replace(/\.00/g,'');        
+        $(e).siblings('.currency-input-value').val(savedValue);
+
+    }
+
+    $(document).ready(function() {
+        $('select').select2();
+
+        $('input.currency-input').each(function() {
+            formatToCurrency(this);
+            $(this).on('blur', function() {
+                formatToCurrency(this);
+            });
+        })
+    });
 </script>
 </html>
 

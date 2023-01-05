@@ -24,7 +24,10 @@ class Barang extends CI_Controller {
 
 		$allBarang = $this->ModelBarang->getAll();
 
-		$this->load->view('barang/index', [
+		// $this->load->view('barang/index', [
+		// 	'allBarang' => $allBarang
+		// ]);
+		$this->render('barang/index', [
 			'allBarang' => $allBarang
 		]);
 	}
@@ -119,6 +122,18 @@ class Barang extends CI_Controller {
 			echo 'error';
 		}
 		
+	}
+
+	protected function render($view, $data)
+	{
+		$active = 'barang';
+		
+		$this->load->view('layouts/header');
+		$this->load->view('layouts/menu', [
+			'active' => $active
+		]);
+		$this->load->view($view, $data);
+		$this->load->view('layouts/footer');
 	}
 
 

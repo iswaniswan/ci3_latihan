@@ -32,7 +32,7 @@ class ModelPembelian extends CI_Model{
     }
 
     public function create($params)
-    {
+    {        
         $data = [
             'id_supplier' => @$params['id_supplier'],
             'tanggal' => @$params['tanggal'],
