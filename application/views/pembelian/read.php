@@ -90,201 +90,33 @@
 	</div>
 </div>
 
-<!-- fungsi terbilang bahasa indonesia -->
+<script type="text/javascript" src="<?= base_url('public/libs/js/terbilang.js') ?>"></script>
+<script type="text/javascript" src="<?= base_url('public/libs/js/currencyFormatter.js') ?>"></script>
 <script>
-    const terbilang = (a) => {
-		let kalimat = ''; let utama = ''; let depan = ''; let belakang = '';
-		let bilangan = ['','Satu','Dua','Tiga','Empat','Lima','Enam','Tujuh','Delapan','Sembilan','Sepuluh','Sebelas'];
-
-	// 1 - 11
-	if(a < 12){
-		kalimat = bilangan[a];
-	}
-	// 12 - 19
-	else if(a < 20){
-		kalimat = bilangan[a-10]+' Belas';
-	}
-	// 20 - 99
-	else if(a < 100){
-		utama = a/10;
-		depan = parseInt(String(utama).substr(0,1));
-		belakang = a%10;
-		kalimat = bilangan[depan]+' Puluh '+bilangan[belakang];
-	}
-	// 100 - 199
-	else if(a < 200){
-		kalimat = 'Seratus '+ terbilang(a - 100);
-	}
-	// 200 - 999
-	else if(a < 1000){
-		utama = a/100;
-		depan = parseInt(String(utama).substr(0,1));
-		belakang = a%100;
-		kalimat = bilangan[depan] + ' Ratus '+ terbilang(belakang);
-	}
-	// 1,000 - 1,999
-	else if(a < 2000){
-		kalimat = 'Seribu '+ terbilang(a - 1000);
-	}
-	// 2,000 - 9,999
-	else if(a < 10000){
-		utama = a/1000;
-		depan = parseInt(String(utama).substr(0,1));
-		belakang = a%1000;
-		kalimat = bilangan[depan] + ' Ribu '+ terbilang(belakang);
-	}
-	// 10,000 - 99,999
-	else if(a < 100000){
-		utama = a/100;
-		depan = parseInt(String(utama).substr(0,2));
-		belakang = a%1000;
-		kalimat = terbilang(depan) + ' Ribu '+ terbilang(belakang);
-	}
-	// 100,000 - 999,999
-	else if(a < 1000000){
-		utama = a/1000;
-		depan = parseInt(String(utama).substr(0,3));
-		belakang = a%1000;
-		kalimat = terbilang(depan) + ' Ribu '+ terbilang(belakang);
-	}
-	// 1,000,000 - 	99,999,999
-	else if(a < 100000000){
-		utama = a/1000000;
-		depan = parseInt(String(utama).substr(0,4));
-		belakang = a%1000000;
-		kalimat = terbilang(depan) + ' Juta '+ terbilang(belakang);
-	}
-	else if(a < 1000000000){
-		utama = a/1000000;
-		depan = parseInt(String(utama).substr(0,4));
-		belakang = a%1000000;
-		kalimat = terbilang(depan) + ' Juta '+ terbilang(belakang);
-	}
-	else if(a < 10000000000){
-		utama = a/1000000000;
-		depan = parseInt(String(utama).substr(0,1));
-		belakang = a%1000000000;
-		kalimat = terbilang(depan) + ' Milyar '+ terbilang(belakang);
-	}
-	else if(a < 100000000000){
-		utama = a/1000000000;
-		depan = parseInt(String(utama).substr(0,2));
-		belakang = a%1000000000;
-		kalimat = terbilang(depan) + ' Milyar '+ terbilang(belakang);
-	}
-	else if(a < 1000000000000){
-		utama = a/1000000000;
-		depan = parseInt(String(utama).substr(0,3));
-		belakang = a%1000000000;
-		kalimat = terbilang(depan) + ' Milyar '+ terbilang(belakang);
-	}
-	else if(a < 10000000000000){
-		utama = a/10000000000;
-		depan = parseInt(String(utama).substr(0,1));
-		belakang = a%10000000000;
-		kalimat = terbilang(depan) + ' Triliun '+ terbilang(belakang);
-	}
-	else if(a < 100000000000000){
-		utama = a/1000000000000;
-		depan = parseInt(String(utama).substr(0,2));
-		belakang = a%1000000000000;
-		kalimat = terbilang(depan) + ' Triliun '+ terbilang(belakang);
-	}
-
-	else if(a < 1000000000000000){
-		utama = a/1000000000000;
-		depan = parseInt(String(utama).substr(0,3));
-		belakang = a%1000000000000;
-		kalimat = terbilang(depan) + ' Triliun '+ terbilang(belakang);
-	}
-
-  else if(a < 10000000000000000){
-		utama = a/1000000000000000;
-		depan = parseInt(String(utama).substr(0,1));
-		belakang = a%1000000000000000;
-		kalimat = terbilang(depan) + ' Kuadriliun '+ terbilang(belakang);
-	}
-
-	var pisah = kalimat.split(' ');
-	var full = [];
-	for(var i=0;i<pisah.length;i++){
-	 if(pisah[i] != ""){full.push(pisah[i]);}
-	}
-	return full.join(' ');
-}
-</script>
-
-
-
-<!-- currency formatter -->
-<script type="text/javascript">
-function formatNumber(n) {
-  // format number 1000000 to 1,234,567
-  return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-}
-
-
-function formatCurrency(input, blur) {
-  var input_val = input.val();
-
-  if (input_val === "") { return; }
-  var original_len = input_val.length;
-  var caret_pos = input.prop("selectionStart");
-  if (input_val.indexOf(".") >= 0) {
-    var decimal_pos = input_val.indexOf(".");
-    var left_side = input_val.substring(0, decimal_pos);
-    var right_side = input_val.substring(decimal_pos);
-    left_side = formatNumber(left_side);
-    right_side = formatNumber(right_side);
-    if (blur === "blur") {
-      right_side += "00";
-    }
-    right_side = right_side.substring(0, 2);
-    input_val = left_side + "." + right_side;
-
-  } else {
-    input_val = formatNumber(input_val);
-    input_val = input_val;
-    if (blur === "blur") {
-      input_val += ".00";
-    }
-  }
-  
-  input.val(input_val);
-  var updated_len = input_val.length;
-  caret_pos = updated_len - original_len + caret_pos;
-  input[0].setSelectionRange(caret_pos, caret_pos);
-}
-
-</script>
-<script>
-    const formatToCurrency = (e) => {        // return;
-        const value = e.value.replace(/,/g, '');
-        e.value = parseFloat(value).toLocaleString('en-US', {
-            style: 'decimal',
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2
-        });
-		e.value = 'Rp. ' + e.value;
-    }
+    // const formatToCurrency = (e) => {        // return;
+    //     const value = e.value.replace(/,/g, '');
+    //     e.value = parseFloat(value).toLocaleString('en-US', {
+    //         style: 'decimal',
+    //         maximumFractionDigits: 2,
+    //         minimumFractionDigits: 2
+    //     });
+	// 	e.value = 'Rp. ' + e.value;
+    // }
 
 	const fillElementTotal = (e) => {
         //get harga
         let parent = $(e).closest('tr');
-        let harga = parent.find('input.currency-input').val();
-        
+        let harga = parent.find('input.currency-input').val();        
         let quantity = parent.find('input.quantity-input').val();
-
         let value = getTotal(harga, quantity);
         
         if (isNaN(value)) {
             value = 0;
         }        
         
-        // let valueFormatted = formatNumber(value.toString()) + ".00";
         let total = parent.find('input.total-input');
         total.val(value);
-        formatCurrency(total, "blur");
+        FormatCurrency(total, "blur", "Rp.");
 
         // calc grandTotal
         calculateGrandTotal();
@@ -310,25 +142,31 @@ function formatCurrency(input, blur) {
         })
 
         let grandTotal = 0;
-        $.each(arrayHarga,function() {
-            grandTotal += parseInt(this);
+        $.each(arrayHarga, function() {
+            grandTotal += parseFloat(this);
         });
-        console.log("grandTotal: ", grandTotal);        
-        $('#grand-total').val(grandTotal);
-        formatCurrency($('#grand-total'), "blur");
 
-		fillElementTerbilang(grandTotal);
+        if (isNaN(grandTotal)) {
+            $('#grand-total').val(0);
+            return;
+        }
+
+        // console.log("grandTotal: ", grandTotal);        
+        $('#grand-total').val(grandTotal);
+        FormatCurrency($('#grand-total'), "blur", "Rp.");
+
+        fillElementTerbilang(grandTotal);
     }
 
     const fillElementTerbilang = (value) => {
-        const _text = terbilang(value);
-        console.log("terbilang", _text);
-        $('#terbilang').text(_text);
+        const _text = Terbilang(value);
+        $('#terbilang').text(_text + 'Rupiah');
     }
 
     $(document).ready(function() {
         $('input.currency-input').each(function() {
-            formatToCurrency(this);
+            // formatToCurrency(this);
+			FormatCurrency($(this), "blur", "Rp. ")
 			fillElementTotal(this);
         })
 
