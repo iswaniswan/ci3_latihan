@@ -28,6 +28,10 @@
                             <label class="form-label">Nama</label>
                             <input type="text" class="form-control" name="nama">
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Harga</label>
+                            <input type="text" class="form-control" name="harga">
+                        </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <a href="<?= site_url('barang/index') ?>" class="btn btn-dark">Kembali</a>
                     </form>

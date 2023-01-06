@@ -5,3 +5,16 @@
 - 1 header bisa multiple item/detail.
 - gunakan library select2 untuk pencarian dropdown
 - perbaiki fungsi update
+
+2023-06-01
+- tambah kolom total & grand total pada pembelian.
+- tambah fungsi terbilang.
+- tambah kolom harga di master barang.
+- gunakan data table.
+- tampilan harga berformat currency di table barang, tambah Rp.
+- trigger untuk hitung ulang jika ada perubahan di kolom harga (form pembelian).
+- validasi jika barang sudah dipilih (form pembelian).
+- harga bisa input nilai koma (form pembelian).
+
+
+

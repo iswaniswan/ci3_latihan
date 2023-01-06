@@ -14,12 +14,13 @@
 				</div>
 				<div class="col-12">
 					<?php $no = 1; ?>
-					<table class="table table-bordered table-hover">
+					<table class="table table-bordered table-hover pt-4">
 						<thead>
 							<tr>
 							<th scope="col">#</th>
 							<th scope="col">Kode</th>
 							<th scope="col">Nama</th>
+							<th scope="col">Harga</th>
 							<th scope="col">Action</th>
 							<th scope="col">Status</th>
 							</tr>
@@ -30,6 +31,7 @@
 									<td><?= $no++ ?></td>
 									<td><?= $barang['kode'] ?></td>
 									<td><?= $barang['nama'] ?></td>
+									<td><span class="format-harga"></span>Rp. <?= number_format($barang['harga'], 2, ".", ",")?></td>
 									<td>
 										<div class="container">
 											<a href="<?= site_url('barang/read/'.$barang['id']) ?>" class="btn btn-sm btn-success"><i class="bi-eye"></i></a>
@@ -81,5 +83,9 @@
 				})
 			})
 		})
+	})
+
+	$(document).ready(function() {
+		$('table').dataTable();
 	})
 </script>

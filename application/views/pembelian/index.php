@@ -14,7 +14,7 @@
 				</div>
 				<div class="col-12">
 					<?php $no = 1; ?>
-					<table class="table table-bordered table-hover">
+					<table class="table table-bordered table-hover pt-4">
 						<thead>
 							<tr>
 							<th scope="col">#</th>
@@ -48,3 +48,10 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	$(document).ready(function() {
+		$('table').dataTable();
+	})
+
+</script>

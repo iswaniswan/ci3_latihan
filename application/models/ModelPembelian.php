@@ -25,7 +25,7 @@ class ModelPembelian extends CI_Model{
             $where = " WHERE $this->tableName.id=$id ";
         }
 
-        $select = "$this->tableName.id, tanggal, id_barang, b.nama as nama_barang, id_supplier, s.nama as nama_supplier, harga, qty, keterangan";
+        $select = "$this->tableName.id, tanggal, id_barang, b.nama as nama_barang, b.harga, id_supplier, s.nama as nama_supplier, pd.qty, keterangan";
 
         $query = $this->db->query("SELECT $select FROM $this->tableName $join $where ORDER BY id ASC");
         return $query->result_array();

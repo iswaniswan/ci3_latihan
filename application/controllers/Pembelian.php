@@ -33,7 +33,7 @@ class Pembelian extends CI_Controller {
 	{
 		$post = $this->input->post();
 		if ($post != null) {
-			// echo '<pre>'; var_dump($post); echo '</pre>'; die();
+			// echo '<pre>'; var_dump($post); echo '</pre>';
 			// pembelian header
 			$params = [
 				'tanggal' => @$post['tanggal'],
@@ -50,9 +50,10 @@ class Pembelian extends CI_Controller {
 				// pembelian_detail
 				$success = true;
 				foreach (@$post['items'] as $item) {
+					$harga = $this->currencyToInt($item['harga']);
 					$data = [
 						'id_barang' => $item['id_barang'],
-						'harga' => $item['harga'],
+						'harga' => $harga,
 						'qty' => $item['qty'],
 					];
 					
@@ -97,6 +98,19 @@ class Pembelian extends CI_Controller {
 		return $allBarang;
 	}
 
+	public function currencyToInt($str='')
+	{
+		// hapus prefix Rp.
+		$str = str_replace("Rp.", "", $str);
+		
+		// hapus 2 digit dibelakang titik
+		$str = str_replace(".00", "", $str);
+
+		// hapus comma
+		$str = str_replace(",", "", $str);
+		return $str;
+	}
+
 	public function read($id) 
 	{
 		$this->load->model('ModelPembelian');
@@ -104,8 +118,10 @@ class Pembelian extends CI_Controller {
 
 		$data = $this->ModelPembelian->getAllWithDetail($id)[0];
 
+		$select = "pembelian_detail.id, pembelian_detail.id_pembelian, pembelian_detail.id_barang, pembelian_detail.qty, b.harga";
+		$join = " INNER JOIN barang b ON b.id=pembelian_detail.id_barang ";
 		$where = " WHERE id_pembelian=".$data['id'];
-		$items = $this->ModelPembelianDetail->get('', '', $where, '', '');
+		$items = $this->ModelPembelianDetail->get($select, $join, $where, '', '');
 
 		$allBarang = $this->getAllBarang();
 
@@ -141,11 +157,12 @@ class Pembelian extends CI_Controller {
 				foreach (@$post['items'] as $item) {	
 					if (intval($item['qty']) <= 0) {
 						continue;
-					}				
+					}			
+					$harga = $this->currencyToInt($item['harga']);	
 					$data = [
 						'id_pembelian' => $post['id'],
 						'id_barang' => $item['id_barang'],
-						'harga' => $item['harga'],
+						'harga' => $harga,
 						'qty' => $item['qty'],
 					];
 					
@@ -163,8 +180,10 @@ class Pembelian extends CI_Controller {
 
 		$data = $this->ModelPembelian->getAllWithDetail($id)[0];
 
+		$select = "pembelian_detail.id, pembelian_detail.id_pembelian, pembelian_detail.id_barang, pembelian_detail.qty, b.harga";
+		$join = " INNER JOIN barang b ON b.id=pembelian_detail.id_barang ";
 		$where = " WHERE id_pembelian=".$data['id'];
-		$items = $this->ModelPembelianDetail->get('', '', $where, '', '');
+		$items = $this->ModelPembelianDetail->get($select, $join, $where, '', '');
 
 		$allSupplier = $this->getAllSupplier();
 		$allBarang = $this->getAllBarang();
@@ -203,5 +222,6 @@ class Pembelian extends CI_Controller {
 		$this->load->view($view, $data);
 		$this->load->view('layouts/footer');
 	}
+
 
 }

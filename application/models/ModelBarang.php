@@ -16,7 +16,8 @@ class ModelBarang extends CI_Model{
     {
         $data = [
             'kode' => @$params['kode'],
-            'nama' => @$params['nama']
+            'nama' => @$params['nama'],
+            'harga' => @$params['harga']
         ];
         $this->db->insert($this->tableName, $data); 
 
@@ -38,7 +39,10 @@ class ModelBarang extends CI_Model{
         }            
         if(@$params['nama']) {
             $data['nama'] = $params['nama'];
-        }            
+        }      
+        if(@$params['harga']) {
+            $data['harga'] = $params['harga'];
+        }          
         if(@$params['status']) {
             $data['status'] = $params['status'];
         }            
