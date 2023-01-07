@@ -6,11 +6,25 @@ class ModelPembelian extends CI_Model{
 
     public $tableName = 'pembelian';
 
-    public function getAll()
+    public function getAll($params=[])
     {
-        $join = "INNER JOIN supplier s ON s.id=$this->tableName.id_supplier::integer ";
         $select = "$this->tableName.id, tanggal, keterangan, s.nama as nama_supplier";
-        $query = $this->db->query("SELECT $select FROM $this->tableName $join ORDER BY id ASC");
+        $join = "INNER JOIN supplier s ON s.id=$this->tableName.id_supplier::integer ";
+		$order = "ORDER BY id ASC";
+		$where = '';
+		if (@$params['count'] != null) {
+			$select = "count($this->tableName.id)";
+			$order = '';
+		}
+		if (@$params['where'] != null) {
+			$where = ' WHERE '.$params['where'];
+		}
+		if (@$params['join'] != null) {
+			$join = $params['join'];
+		}
+
+		$sql = "SELECT $select FROM $this->tableName $join $where $order";
+        $query = $this->db->query($sql);
         return $query->result_array();
     }
 
@@ -25,7 +39,7 @@ class ModelPembelian extends CI_Model{
             $where = " WHERE $this->tableName.id=$id ";
         }
 
-        $select = "$this->tableName.id, tanggal, id_barang, b.nama as nama_barang, b.harga, id_supplier, s.nama as nama_supplier, pd.qty, keterangan";
+        $select = "$this->tableName.id, no_dokumen, tanggal, id_barang, b.nama as nama_barang, b.harga, id_supplier, s.nama as nama_supplier, pd.qty, keterangan";
 
         $query = $this->db->query("SELECT $select FROM $this->tableName $join $where ORDER BY id ASC");
         return $query->result_array();
@@ -36,7 +50,8 @@ class ModelPembelian extends CI_Model{
         $data = [
             'id_supplier' => @$params['id_supplier'],
             'tanggal' => @$params['tanggal'],
-            'keterangan' => @$params['keterangan']
+            'keterangan' => @$params['keterangan'],
+			'no_dokumen' => @$params['no_dokumen']
         ];
         $this->db->insert($this->tableName, $data);  
         

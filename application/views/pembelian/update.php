@@ -9,6 +9,10 @@
 				</div>
 				<div class="card-body mb-4">
 					<div class="mb-3">
+						<label class="form-label">No. Dokumen</label>
+						<input type="text" class="form-control" name="tanggal" value="<?= $data['no_dokumen'] ?>" disabled>
+					</div>
+					<div class="mb-3">
 						<label class="form-label">Tanggal</label>
 						<input type="date" class="form-control" name="tanggal" value="<?= $data['tanggal'] ?>">
 					</div>
@@ -334,20 +338,20 @@
     }
 
 	$(document).ready(function() {
-		$('select').select2();	
-		$('select.select-input').on('select2:select', function() {
-			//validate double item
-            validateDuplicates();
+		$('select').select2();
 
-            fillElementHarga($(this));
-
-            const parent = $(this).closest('tr');
-            const quantity = parent.find('input.quantity-input');
-            setTimeout(function() {
-                fillElementTotal(quantity);
-            }, 100)
-            
-        });
+		$('select.select-input').each(function() {
+			$(this).on('select2:select', function() {
+				//validate double item
+				validateDuplicates();
+				fillElementHarga($(this));
+				const parent = $(this).closest('tr');
+				const quantity = parent.find('input.quantity-input');
+				setTimeout(function() {
+					fillElementTotal(quantity);
+				}, 100)
+			});
+		})
 
 		$("input.currency-input").each(function() {
             $(this).on({
@@ -372,9 +376,8 @@
                 fillElementTotal($(this));
             })
         })
-
-		
         calculateGrandTotal();
+		validateDuplicates();
 	});
 </script>
 

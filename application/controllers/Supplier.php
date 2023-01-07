@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Supplier extends CI_Controller {
+require 'BaseController.php';
+class Supplier extends BaseController {
 
 	/**
 	 * Index Page for this controller.

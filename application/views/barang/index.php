@@ -1,4 +1,11 @@
 <div class="row">
+	<?php if (@$this->session->flashdata('alert-success')) { ?>
+		<div class="container">
+			<div class="col-12 alert alert-success" role="alert">
+				<?= $this->session->flashdata('alert-success') ?>
+			</div>
+		</div>
+	<?php } ?>
 	<div class="container">
 		<div class="card">
 			<div class="card-header bg-light mb-2">
@@ -87,5 +94,9 @@
 
 	$(document).ready(function() {
 		$('table').dataTable();
+
+		setTimeout(() => {
+			$('.alert').fadeOut();
+		}, 1000)
 	})
 </script>

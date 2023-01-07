@@ -1,4 +1,12 @@
 <div class="row">
+	<?php if (@$this->session->flashdata('alert-success')) { ?>
+			<div class="container">
+				<div class="col-12 alert alert-success" role="alert">
+					<?= $this->session->flashdata('alert-success') ?>
+				</div>
+			</div>
+	<?php } ?>
+
 	<div class="col-12">
 		<form method="POST">
 			<div class="card mb-4">
@@ -8,6 +16,10 @@
 					</h3>
 				</div>
 				<div class="card-body mb-4">
+					<div class="mb-3">
+						<label class="form-label">No. Dokumen</label>
+						<input type="text" class="form-control" name="tanggal" value="<?= $data['no_dokumen'] ?>" disabled>
+					</div>
 					<div class="mb-3">
 						<label class="form-label">Tanggal</label>
 						<input type="text" class="form-control" name="tanggal" value="<?= $data['tanggal'] ?>" disabled>
@@ -22,6 +34,7 @@
 					</div>
 					<!-- <button type="submit" class="btn btn-primary">Submit</button> -->
 					<a href="<?= site_url('pembelian/index') ?>" class="btn btn-dark">Kembali</a>
+					<a href="<?= site_url('pembelian/update/' . $data['id']) ?>" class="btn btn-warning">Ubah</a>
 				</div>
 			</div>
 
@@ -171,6 +184,10 @@
         })
 
 		calculateGrandTotal();
+
+		setTimeout(() => {
+			$('.alert').fadeOut();
+		}, 2000)
     })
 
 </script>

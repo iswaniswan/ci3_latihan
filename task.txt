@@ -17,4 +17,12 @@
 - harga bisa input nilai koma (form pembelian).
 
 
+2023-07-01
+- tambah nomor dokumen, tampilkan flash setelah submit.
+- cek bug harga koma seletah hapus item.
+- perhitungan harga mengambil dari data transaksi.
+- user login.
+
+
+
 

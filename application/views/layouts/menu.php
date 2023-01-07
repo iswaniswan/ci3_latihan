@@ -15,6 +15,7 @@
 					<a class="nav-link <?= $active == 'pembelian' ? 'active' : '' ?>" href="<?= site_url('pembelian/index') ?>">Pembelian</a>
 				</li>
 			</ul>
+			<a href="<?= site_url('auth/logout') ?>" class="btn btn-sm btn-outline-dark float-right">Logout</a>
 		</div>
 	</div>
 </nav>

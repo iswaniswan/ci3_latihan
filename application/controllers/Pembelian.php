@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pembelian extends CI_Controller {
+require 'BaseController.php';
+class Pembelian extends BaseController {
 
 	/**
 	 * Index Page for this controller.
@@ -38,7 +39,8 @@ class Pembelian extends CI_Controller {
 			$params = [
 				'tanggal' => @$post['tanggal'],
 				'id_supplier' => @$post['id_supplier'],
-				'keterangan' => @$post['keterangan']
+				'keterangan' => @$post['keterangan'],
+				'no_dokumen' => $this->generateNumberDocument(@$post['tanggal'])
 			];
 			
 			$this->load->model('ModelPembelian');
@@ -65,7 +67,10 @@ class Pembelian extends CI_Controller {
 				
 				if ($success) {
 					// return redirect('pembelian/read/'.$last_id_inserted);
-					return redirect('pembelian/index');
+//					var_dump($params);
+					$message = 'Nomor dokumen '. $params['no_dokumen'] . ' berhasil tersimpan.';
+					$this->session->set_flashdata('alert-success', $message);
+					redirect('pembelian/read/'.$last_id_inserted);
 				} else {
 					die ('error pembelian detail');
 				}
@@ -118,7 +123,7 @@ class Pembelian extends CI_Controller {
 
 		$data = $this->ModelPembelian->getAllWithDetail($id)[0];
 
-		$select = "pembelian_detail.id, pembelian_detail.id_pembelian, pembelian_detail.id_barang, pembelian_detail.qty, b.harga";
+		$select = "pembelian_detail.id, pembelian_detail.id_pembelian, pembelian_detail.id_barang, pembelian_detail.qty, pembelian_detail.harga";
 		$join = " INNER JOIN barang b ON b.id=pembelian_detail.id_barang ";
 		$where = " WHERE id_pembelian=".$data['id'];
 		$items = $this->ModelPembelianDetail->get($select, $join, $where, '', '');
@@ -170,7 +175,7 @@ class Pembelian extends CI_Controller {
 					$this->ModelPembelianDetail->create($data);
 					// echo '<pre>'; var_dump($params['qty']); echo '</pre>';
 				}
-				
+				$this->session->set_flashdata('alert-success', 'Update berhasil');
 				redirect('pembelian/read/'.$post['id']);
 
 			} else {
@@ -180,7 +185,7 @@ class Pembelian extends CI_Controller {
 
 		$data = $this->ModelPembelian->getAllWithDetail($id)[0];
 
-		$select = "pembelian_detail.id, pembelian_detail.id_pembelian, pembelian_detail.id_barang, pembelian_detail.qty, b.harga";
+		$select = "pembelian_detail.id, pembelian_detail.id_pembelian, pembelian_detail.id_barang, pembelian_detail.qty, pembelian_detail.harga";
 		$join = " INNER JOIN barang b ON b.id=pembelian_detail.id_barang ";
 		$where = " WHERE id_pembelian=".$data['id'];
 		$items = $this->ModelPembelianDetail->get($select, $join, $where, '', '');
@@ -221,6 +226,47 @@ class Pembelian extends CI_Controller {
 		]);
 		$this->load->view($view, $data);
 		$this->load->view('layouts/footer');
+	}
+
+	private function getCountPembelian($periode=null)
+	{
+		$this->load->model('ModelPembelian');
+		$nowMonth = date('Y-m');
+		if ($periode != null) {
+			$nowMonth = $periode;
+		}
+		$where = "TO_CHAR(tanggal, 'yyyy-mm') like '%$nowMonth'";
+		$params = [
+			'where' => $where,
+			'count' => true,
+			'join' => ' '
+		];
+		$query = $this->ModelPembelian->getAll($params);
+		return @$query[0]['count'] ?? 0;
+	}
+
+	public function generateNumberDocument($tanggal='')
+	{
+		/* contoh format nomor dokumen
+		"OP-2301-0001";
+		*/
+		$prefix = 'OP';
+		$delimiter = '-';
+		$nowMonth = date('y-m');
+		if ($tanggal) {
+			$date = strtotime($tanggal);
+			$nowMonth = date('y-m', $date);
+		}
+		$count = $this->getCountPembelian($nowMonth) + 1;
+		$nextCount = sprintf('%04d', $count);
+		$nowMonth = str_replace("-", "", $nowMonth);
+		$noDocument = $prefix . $delimiter . $nowMonth . $delimiter . $nextCount;
+		return $noDocument;
+	}
+
+	public function test()
+	{
+		$this->getCountPembelian('2022-12-01');
 	}
 
 
