@@ -8,7 +8,7 @@ class ModelPembelian extends CI_Model{
 
     public function getAll($params=[])
     {
-        $select = "$this->tableName.id, tanggal, keterangan, s.nama as nama_supplier";
+        $select = "$this->tableName.id, tanggal, no_dokumen, keterangan, s.nama as nama_supplier, $this->tableName.status";
         $join = "INNER JOIN supplier s ON s.id=$this->tableName.id_supplier::integer ";
 		$order = "ORDER BY id ASC";
 		$where = '';

@@ -143,7 +143,6 @@ class Barang extends BaseController {
 		} else {
 			echo 'error';
 		}
-		
 	}
 
 	protected function render($view, $data=[])

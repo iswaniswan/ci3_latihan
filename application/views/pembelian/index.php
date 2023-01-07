@@ -17,11 +17,13 @@
 					<table class="table table-bordered table-hover pt-4">
 						<thead>
 							<tr>
-							<th scope="col">#</th>
-							<th scope="col">Tanggal</th>
-							<th scope="col">Supplier</th>
-							<th scope="col">Keterangan</th>
-							<th scope="col">Action</th>
+								<th scope="col">#</th>
+								<th scope="col">Tanggal</th>
+								<th scope="col">No. Dokumen</th>
+								<th scope="col">Supplier</th>
+								<th scope="col">Keterangan</th>
+								<th scope="col">Action</th>
+								<th scope="col">Status</th>
 							</tr>
 						</thead>
 
@@ -30,6 +32,7 @@
 								<tr>
 									<td><?= $no++ ?></td>
 									<td><?= $pembelian['tanggal'] ?></td>
+									<td><?= $pembelian['no_dokumen'] ?></td>
 									<td><?= $pembelian['nama_supplier'] ?></td>
 									<td><?= $pembelian['keterangan'] ?></td>
 									<td>
@@ -38,6 +41,23 @@
 											<a href="<?= site_url('pembelian/update/'.$pembelian['id']) ?>" class="btn btn-sm btn-warning"><i class="bi-pencil"></i></a>
 											<a href="<?= site_url('pembelian/delete/'.$pembelian['id']) ?>" class="btn btn-sm btn-danger"><i class="bi-trash"></i></a>
 										</div>
+									</td>
+									<td>
+										<?php $disabled = 'disabled'; $onsytle = 'disabled';
+											if ($pembelian['canUpdateStatus']) {
+												$disabled = '';
+												$onsytle = 'success';
+											}
+										?>
+										<?php $checked = $pembelian['status'] == 't' ? 'checked' : ''; ?>
+										<input type="checkbox" name="status" <?= $disabled ?>
+											   class="bootstrap-toggle" <?= $checked ?>
+											   data-toggle="toggle"
+											   data-size="small"
+											   data-on="Active"
+											   data-off="Inactive"
+											   data-onstyle="<?= $onsytle ?>"
+											   data-id="<?= $pembelian['id'] ?>">
 									</td>
 								</tr>
 							<?php } ?>
@@ -48,10 +68,35 @@
 		</div>
 	</div>
 </div>
-
+<style>
+	.bootstrap-toggle:hover {
+		cursor: not-allowed;
+	}
+</style>
 <script>
 	$(document).ready(function() {
 		$('table').dataTable();
+
+		$('.bootstrap-toggle').each(function() {
+			$(this).change(function() {
+				const status = $(this).prop('checked');
+				const id = $(this).data('id');
+				console.log(id, status);
+				$.ajax({
+					'url': "<?= site_url('pembelian/test') ?>",
+					'method': 'POST',
+					'data': {
+						id: id,
+						status:status
+					},
+					success: function(result){
+						if (result === 'success') {
+							location.reload();
+						}
+					}
+				})
+			})
+		})
 	})
 
 </script>

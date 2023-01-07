@@ -23,11 +23,29 @@ class Pembelian extends BaseController {
 	{
 		$this->load->model('ModelPembelian');
 		
-		$allPembelian = $this->ModelPembelian->getAll();
+		$allPembelian = [];
+		$query = $this->ModelPembelian->getAll();
+		foreach ($query as $result) {
+			$canUpdateStatus = $this->canUpdateStatus($result);
+			$result['canUpdateStatus'] = $canUpdateStatus;
+			$allPembelian[] = $result;
+		}
 
 		$this->render('pembelian/index', [
 			'allPembelian' => $allPembelian
 		]);
+	}
+
+	private function canUpdateStatus($params)
+	{
+		$tanggal = strtotime($params['tanggal']);
+		$tanggalPeriode = date('Y-m', $tanggal);
+
+		$todayPeriode = date('Y-m');
+		if ($tanggalPeriode < $todayPeriode) {
+			return false;
+		}
+		return true;
 	}
 
 	public function create()
@@ -266,7 +284,30 @@ class Pembelian extends BaseController {
 
 	public function test()
 	{
-		$this->getCountPembelian('2022-12-01');
+		$params = [
+			'tanggal' => '2022-12-31'
+		];
+		if ($this->canUpdateStatus($params)) {
+			echo "allow";
+		} else {
+			echo "not allow";
+		}
+	}
+
+	public function updateStatus()
+	{
+		$post = $this->input->post();
+		if ($post != null) {
+			$this->load->model('ModelPembelian');
+			$params = [
+				'id' => @$post['id'],
+				'status'=> @$post['status']
+			];
+			$this->ModelPembelian->update($params);
+			echo 'success';
+		} else {
+			echo 'error';
+		}
 	}
 
 
