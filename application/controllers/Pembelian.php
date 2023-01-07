@@ -4,25 +4,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require 'BaseController.php';
 class Pembelian extends BaseController {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/userguide3/general/urls.html
-	 */
+	protected $menu = 'pembelian';
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->setActiveMenu($this->menu);
+
+		//load model
+		$this->load->model('ModelPembelian');
+	}
+
 	public function index()
 	{
-		$this->load->model('ModelPembelian');
-		
 		$allPembelian = [];
 		$query = $this->ModelPembelian->getAll();
 		foreach ($query as $result) {
@@ -60,8 +54,7 @@ class Pembelian extends BaseController {
 				'keterangan' => @$post['keterangan'],
 				'no_dokumen' => $this->generateNumberDocument(@$post['tanggal'])
 			];
-			
-			$this->load->model('ModelPembelian');
+
 			
 			$last_id_inserted = $this->ModelPembelian->create($params);
 
@@ -136,7 +129,6 @@ class Pembelian extends BaseController {
 
 	public function read($id) 
 	{
-		$this->load->model('ModelPembelian');
 		$this->load->model('ModelPembelianDetail');
 
 		$data = $this->ModelPembelian->getAllWithDetail($id)[0];
@@ -157,7 +149,6 @@ class Pembelian extends BaseController {
 
 	public function update($id=null)
 	{
-		$this->load->model('ModelPembelian');
 		$this->load->model('ModelPembelianDetail');
 
 		// action  post submit
@@ -222,7 +213,6 @@ class Pembelian extends BaseController {
 	public function delete($id)
 	{
 		if ($id != null) {
-			$this->load->model('ModelPembelian');
 			if ($this->ModelPembelian->delete($id)) {
 				// delete pembelian detail
 				$this->load->model('ModelPembelianDetail');
@@ -234,21 +224,8 @@ class Pembelian extends BaseController {
 		}		
 	}
 
-	protected function render($view, $data=[])
-	{
-		$active = 'pembelian';
-
-		$this->load->view('layouts/header');
-		$this->load->view('layouts/menu', [
-			'active' => $active
-		]);
-		$this->load->view($view, $data);
-		$this->load->view('layouts/footer');
-	}
-
 	private function getCountPembelian($periode=null)
 	{
-		$this->load->model('ModelPembelian');
 		$nowMonth = date('Y-m');
 		if ($periode != null) {
 			$nowMonth = $periode;
@@ -298,7 +275,6 @@ class Pembelian extends BaseController {
 	{
 		$post = $this->input->post();
 		if ($post != null) {
-			$this->load->model('ModelPembelian');
 			$params = [
 				'id' => @$post['id'],
 				'status'=> @$post['status']
@@ -309,6 +285,5 @@ class Pembelian extends BaseController {
 			echo 'error';
 		}
 	}
-
 
 }

@@ -13,7 +13,7 @@
 			</div>
 		</div>
 	<?php } ?>
-	<div class="col-lg-7 text-center">
+	<div class="col-lg-6 text-center">
 		<h1 class="display-4 fw-bold lh-1 mb-3">App Latihan</h1>
 		<p class="col-12 fs-4">Silakan login untuk menggunakan aplikasi</p>
 	</div>

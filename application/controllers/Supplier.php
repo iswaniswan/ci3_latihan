@@ -4,25 +4,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require 'BaseController.php';
 class Supplier extends BaseController {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/userguide3/general/urls.html
-	 */
+	protected $menu = 'supplier';
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->setActiveMenu($this->menu);
+
+		//load model
+		$this->load->model('ModelSupplier');
+	}
+
 	public function index()
 	{
-		$this->load->model('ModelSupplier');
-
 		$allSupplier = $this->ModelSupplier->getAll();
 
 		$this->render('supplier/index', [
@@ -38,8 +32,7 @@ class Supplier extends BaseController {
 				'kode' => @$post['kode'],
 				'nama' => @$post['nama']
 			];
-			
-			$this->load->model('ModelSupplier');
+
 			if ($this->ModelSupplier->create($params)) {
 				redirect('supplier/index');
 			} else {
@@ -52,7 +45,6 @@ class Supplier extends BaseController {
 
 	public function read($id) 
 	{
-		$this->load->model('ModelSupplier');
 		$data = $this->ModelSupplier->read($id);
 
 		$this->render('supplier/read', [
@@ -62,8 +54,6 @@ class Supplier extends BaseController {
 
 	public function update($id=null)
 	{
-		$this->load->model('ModelSupplier');
-
 		// action  post submit
 		$post = $this->input->post();
 		if ($post != null) {
@@ -95,7 +85,6 @@ class Supplier extends BaseController {
 	public function delete($id)
 	{
 		if ($id != null) {
-			$this->load->model('ModelSupplier');
 			if ($this->ModelSupplier->delete($id)) {
 				redirect ('supplier/index');
 			} else {
@@ -108,7 +97,6 @@ class Supplier extends BaseController {
 	{
 		$post = $this->input->post();
 		if ($post != null) {
-			$this->load->model('ModelSupplier');
 			$params = [
 				'id' => @$post['id'],
 				'status'=> @$post['status']
@@ -118,18 +106,6 @@ class Supplier extends BaseController {
 		} else {
 			echo 'error';
 		}
-		
 	}
 
-	protected function render($view, $data=[])
-	{
-		$active = 'supplier';
-
-		$this->load->view('layouts/header');
-		$this->load->view('layouts/menu', [
-			'active' => $active
-		]);
-		$this->load->view($view, $data);
-		$this->load->view('layouts/footer');
-	}
 }

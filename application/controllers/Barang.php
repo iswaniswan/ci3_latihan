@@ -4,30 +4,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require 'BaseController.php';
 class Barang extends BaseController {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/userguide3/general/urls.html
-	 */
+	protected $menu = 'barang';
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->setActiveMenu($this->menu);
+
+		//load model
+		$this->load->model('ModelBarang');
+	}
+
 	public function index()
 	{
-		$this->load->model('ModelBarang');
-
 		$allBarang = $this->ModelBarang->getAll();
 
-		// $this->load->view('barang/index', [
-		// 	'allBarang' => $allBarang
-		// ]);
 		$this->render('barang/index', [
 			'allBarang' => $allBarang
 		]);
@@ -47,8 +38,7 @@ class Barang extends BaseController {
 				'harga' => @$post['harga'],
 				'status' => $status
 			];
-			
-			$this->load->model('ModelBarang');
+
 			if ($this->ModelBarang->create($params)) {
 				redirect('barang/index');
 			} else {
@@ -61,7 +51,6 @@ class Barang extends BaseController {
 
 	public function read($id) 
 	{
-		$this->load->model('ModelBarang');
 		$data = $this->ModelBarang->read($id);
 
 		$this->render('barang/read', [
@@ -84,8 +73,6 @@ class Barang extends BaseController {
 
 	public function update($id=null)
 	{
-		$this->load->model('ModelBarang');
-
 		// action  post submit
 		$post = $this->input->post();
 		if ($post != null) {
@@ -120,7 +107,6 @@ class Barang extends BaseController {
 	public function delete($id)
 	{
 		if ($id != null) {
-			$this->load->model('ModelBarang');
 			if ($this->ModelBarang->delete($id)) {
 				redirect ('barang/index');
 			} else {
@@ -133,7 +119,6 @@ class Barang extends BaseController {
 	{
 		$post = $this->input->post();
 		if ($post != null) {
-			$this->load->model('ModelBarang');
 			$params = [
 				'id' => @$post['id'],
 				'status'=> @$post['status']
@@ -145,18 +130,6 @@ class Barang extends BaseController {
 		}
 	}
 
-	protected function render($view, $data=[])
-	{
-		$active = 'barang';
-		
-		$this->load->view('layouts/header');
-		$this->load->view('layouts/menu', [
-			'active' => $active
-		]);
-		$this->load->view($view, $data);
-		$this->load->view('layouts/footer');
-	}
-
 	public function getHargaBarang()
 	{
 		$data = [];
@@ -166,8 +139,6 @@ class Barang extends BaseController {
 			return data;
 		}
 		$id_barang = $post['id_barang'];
-
-		$this->load->model('ModelBarang');
 
 		$allBarang = $this->ModelBarang->getAll();
 		foreach ($allBarang as $barang) {

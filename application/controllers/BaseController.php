@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
 class BaseController extends CI_Controller {
 
 	/**
@@ -18,6 +19,8 @@ class BaseController extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/userguide3/general/urls.html
 	 */
+	protected $menu;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -29,5 +32,20 @@ class BaseController extends CI_Controller {
 		if(!$this->session->userdata('is_login')) {
 			redirect('auth/login');
 		}
+	}
+
+	public function setActiveMenu($menu)
+	{
+		$this->menu = $menu;
+	}
+
+	public function render($viewFile, $data=[])
+	{
+		$this->load->view('layouts/header');
+		$this->load->view('layouts/menu', [
+			'active' => $this->menu
+		]);
+		$this->load->view($viewFile, $data);
+		$this->load->view('layouts/footer');
 	}
 }

@@ -69,8 +69,8 @@
 	</div>
 </div>
 <style>
-	.bootstrap-toggle:hover {
-		cursor: not-allowed;
+	.btn-disabled, .toggle:disabled:hover {
+		cursor: not-allowed !important;
 	}
 </style>
 <script>
