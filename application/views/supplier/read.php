@@ -24,6 +24,9 @@
 					<a href="<?= site_url('supplier/index') ?>" class="btn btn-dark">
 						Kembali
 					</a>
+					<a href="<?= site_url('supplier/update/'.$data['id']) ?>" class="btn btn-warning">
+						Ubah
+					</a>
 				</form>
 			</div>
 		</div>

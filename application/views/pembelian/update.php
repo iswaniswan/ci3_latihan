@@ -30,6 +30,11 @@
 						<label class="form-label">Keterangan</label>
 						<textarea type="text" class="form-control" name="keterangan"><?= $data['keterangan'] ?></textarea>
 					</div>
+					<div class="mb-3">
+						<label class="form-label">Status</label>
+						<?php $checked = $data['status'] == 't' ? 'checked' : ''; ?>
+						<input type="checkbox" class="form-check-input mt-1" name="status" <?= $checked ?> data-id="<?= $data['id'] ?>">
+					</div>
 					<input type="hidden" name="id" value="<?= $data['id'] ?>" />
 					<button type="submit" class="btn btn-primary">Submit</button>
 					<a href="<?= site_url('pembelian/index') ?>" class="btn btn-dark">Kembali</a>
@@ -74,7 +79,7 @@
 											</select>
 										</td>
 										<td>
-											<input type="text" class="form-control currency-input" name="items[<?=$index?>][harga]" value="<?= $item['harga'] ?>" required>
+											<input data-index="<?=$index?>" type="text" class="form-control currency-input" name="items[<?=$index?>][harga]" value="<?= $item['harga'] ?>" required>
 										</td>
 										<td>
 											<input type="number" class="form-control quantity-input" name="items[<?=$index?>][qty]" value="<?= $item['qty'] ?>" required>
@@ -178,14 +183,11 @@
 
     const refrechInputCurrency = () => {
         $('input.currency-input').each(function() {
-            $(this).on({
-                keyup: function() {
-                    FormatCurrency($(this));
-                },
-                blur: function() { 
-                    FormatCurrency($(this), "blur", "Rp. ");
-                }
-            });
+			if ($(this).data('index')) {
+				return;
+			} else {
+				initFormatCurrency($(this));
+			}
         });
     }
 
@@ -201,6 +203,8 @@
         $('select.select-input').each(function() {
             $(this).on('select2:select', function() {
                 fillElementHarga($(this));
+
+				validateDuplicates();
 
                 const parent = $(this).closest('tr');
                 const quantity = parent.find('input.quantity-input');
@@ -285,16 +289,18 @@
         $('#terbilang').text(_text + 'Rupiah');
     }
 
-    const fillElementHarga = async (e) => {
-        const idBarang = $(e).val();
-        const hargaBarang = await getHargaBarang(idBarang);
-        if (parseInt(hargaBarang) > 0) {
-            const parent = $(e).closest('tr');
-            const harga = parent.find('input.currency-input');
-            harga.val(hargaBarang);
-            FormatCurrency(harga, "blur", "Rp.");
-        }        
-    }
+	const fillElementHarga = async (e) => {
+		const idBarang = $(e).val();
+		const hargaBarang = await getHargaBarang(idBarang);
+		if (parseInt(hargaBarang) > 0) {
+			const parent = $(e).closest('tr');
+			const harga = parent.find('input.currency-input');
+			harga.val(hargaBarang);
+			FormatCurrency(harga, "blur", "Rp.");
+			const hargaValue = $(harga).val();
+			$(harga).data("value", hargaValue);
+		}
+	}
 
     const getHargaBarang = async (value) => {
         return await $.ajax({
@@ -320,6 +326,7 @@
         let cart = new Set();
 
         $('select.select-input').each(function() {
+
             let value = $(this).val();
             if (cart.has(value)) {   
                 showAlert();
@@ -336,6 +343,32 @@
         })
         console.log(cart);        
     }
+
+	const initFormatCurrency = (e) => {
+		$(e).on({
+			keyup: function() {
+				const value = $(e).val();
+				const oldValue = $(e).data('value');
+				// console.log("keyup " + value + " vs " + oldValue);
+				if (value == oldValue) {
+					return;
+				}
+				FormatCurrency($(e));
+			},
+			blur: function() {
+				console.log($(e).val());
+				const value = $(e).val();
+				const oldValue = $(e).data('value');
+				if (value == oldValue) {
+					return;
+				}
+				FormatCurrency($(e), "blur", "Rp.");
+				const newValue = $(e).val();
+				$(e).data('value', newValue);
+			}
+		});
+		$(e).attr('data-js', true);
+	}
 
 	$(document).ready(function() {
 		$('select').select2();
@@ -354,14 +387,11 @@
 		})
 
 		$("input.currency-input").each(function() {
-            $(this).on({
-                keyup: function() {
-                    FormatCurrency($(this));
-                },
-                blur: function() { 
-                    FormatCurrency($(this), "blur", "Rp. ");
-                }
-            });
+			if ($(this).data('index')) {
+				return;
+			} else {
+				initFormatCurrency($(this));
+			}
         });
 
 		$('input.currency-input').each(function() {

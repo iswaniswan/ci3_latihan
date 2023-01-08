@@ -1,18 +1,13 @@
 <div class="row align-items-center g-lg-5 py-5">
-	<?php if (@$this->session->flashdata('alert-success')) { ?>
-		<div class="container">
-			<div class="col-12 alert alert-success" role="alert">
-				<?= $this->session->flashdata('alert-success') ?>
+	<?php if (@$this->session->flashdata()) {
+		foreach ($this->session->flashdata() as $key => $value) { ?>
+			<div class="container">
+				<div class="col-12 alert alert-<?=$key?> px-lg-5 px-md-4 px-sm-1 text-center" role="alert">
+					<?= $this->session->flashdata($key) ?>
+				</div>
 			</div>
-		</div>
-	<?php } ?>
-	<?php if (@$this->session->flashdata('alert-error')) { ?>
-		<div class="container">
-			<div class="col-12 alert alert-danger" role="alert">
-				<?= $this->session->flashdata('alert-error') ?>
-			</div>
-		</div>
-	<?php } ?>
+		<?php }
+	} ?>
 	<div class="col-lg-6 text-center">
 		<h1 class="display-4 fw-bold lh-1 mb-3">App Latihan</h1>
 		<p class="col-12 fs-4">Silakan login untuk menggunakan aplikasi</p>
@@ -30,11 +25,7 @@
 
 			<button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
 			<hr class="my-4">
-			<div class="form-floating mb-3">
-				<a href="<?= site_url('auth/register') ?>" class="text-center col-12" style="text-decoration: none">
-					<span class="text-muted">REGISTER</span>
-				</a>
-			</div>
+			<div class="text-muted text-center">Belum punya akun? <a href="<?= site_url('auth/register') ?>">REGISTER</a></div>
 		</form>
 	</div>
 </div>

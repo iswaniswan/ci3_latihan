@@ -165,16 +165,13 @@
     }
 
     const refrechInputCurrency = () => {
-        $('input.currency-input').each(function() {
-            $(this).on({
-                keyup: function() {
-                    FormatCurrency($(this));
-                },
-                blur: function() { 
-                    FormatCurrency($(this), "blur", "Rp. ");
-                }
-            });
-        });
+		$('input.currency-input').each(function() {
+			if ($(this).data('js')) {
+				return;
+			} else {
+				initFormatCurrency($(this));
+			}
+		});
     }
 
     const refreshInputTotal = () => {
@@ -202,7 +199,7 @@
     }
 
     const formatInt = (textInt) => {
-        _int = textInt.replace("Rp. ", "").replaceAll(",", "");
+        _int = textInt.replace("Rp.", "").replaceAll(",", "");
         return parseFloat(_int);
     }
 
@@ -268,6 +265,8 @@
             const harga = parent.find('input.currency-input');
             harga.val(hargaBarang);
             FormatCurrency(harga, "blur", "Rp.");
+			const hargaValue = $(harga).val();
+			$(harga).data("value", hargaValue);
         }        
     }
 
@@ -312,6 +311,32 @@
         console.log(cart);        
     }
 
+	const initFormatCurrency = (e) => {
+		$(e).on({
+			keyup: function() {
+				const value = $(e).val();
+				const oldValue = $(e).data('value');
+				// console.log("keyup " + value + " vs " + oldValue);
+				if (value == oldValue) {
+					return;
+				}
+				FormatCurrency($(e));
+			},
+			blur: function() {
+				console.log($(e).val());
+				const value = $(e).val();
+				const oldValue = $(e).data('value');
+				if (value == oldValue) {
+					return;
+				}
+				FormatCurrency($(e), "blur", "Rp.");
+				const newValue = $(e).val();
+				$(e).data('value', newValue);
+			}
+		});
+		$(e).attr('data-js', true);
+	}
+
     $(document).ready(function() {
         $('select').select2();
         $('select.select-input').on('select2:select', function() {            
@@ -324,18 +349,14 @@
             setTimeout(function() {
                 fillElementTotal(quantity);
             }, 100)
-            
         });
 
         $("input.currency-input").each(function() {
-            $(this).on({
-                keyup: function() {
-                    FormatCurrency($(this));
-                },
-                blur: function() { 
-                    FormatCurrency($(this), "blur", "Rp. ");
-                }
-            });
+			if ($(this).data('js')) {
+				return;
+			} else {
+				initFormatCurrency($(this));
+			}
         });
 
 

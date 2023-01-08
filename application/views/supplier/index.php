@@ -59,6 +59,19 @@
 
 <script>
 	$(function() {
+		const instanceSubmitForm = (params) => {
+			let form = $(document.createElement('form'));
+			$(form).attr("action", "<?= site_url('supplier/updateStatus') ?>");
+			$(form).attr("method", "POST");
+
+			let inputId = $("<input>").attr("type", "hidden").attr("name", "id").val(params?.id);
+			let inputStatus = $("<input>").attr("type", "hidden").attr("name", "status").val(params?.status);
+			$(form).append($(inputId));
+			$(form).append($(inputStatus));
+			$(document.body).append(form);
+			$(form).submit();
+		};
+
 		$('.bootstrap-toggle').bootstrapToggle();
 
 		$('.bootstrap-toggle').each(function() {
@@ -66,19 +79,8 @@
 				const status = $(this).prop('checked');
 				const id = $(this).data('id');
 				console.log(id, status);
-				$.ajax({
-					'url': "<?= site_url('supplier/updateStatus') ?>",
-					'method': 'POST',
-					'data': {
-						id: id,
-						status:status
-					},
-					success: function(result){
-						if (result === 'success') {
-							location.reload();
-						}
-					}
-				})
+				const params = { id: id, status: status };
+				instanceSubmitForm(params);
 			})
 		})
 	})

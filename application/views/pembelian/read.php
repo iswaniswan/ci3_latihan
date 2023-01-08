@@ -1,12 +1,4 @@
 <div class="row">
-	<?php if (@$this->session->flashdata('alert-success')) { ?>
-			<div class="container">
-				<div class="col-12 alert alert-success" role="alert">
-					<?= $this->session->flashdata('alert-success') ?>
-				</div>
-			</div>
-	<?php } ?>
-
 	<div class="col-12">
 		<form method="POST">
 			<div class="card mb-4">
@@ -31,6 +23,11 @@
 					<div class="mb-3">
 						<label class="form-label">Keterangan</label>
 						<textarea type="text" class="form-control" name="keterangan" disabled><?= $data['keterangan'] ?></textarea>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Status</label>
+						<?php $checked = $data['status'] == 't' ? 'checked' : ''; ?>
+						<input type="checkbox" class="form-check-input mt-1" name="status" <?= $checked ?> data-id="<?= $data['id'] ?>">
 					</div>
 					<!-- <button type="submit" class="btn btn-primary">Submit</button> -->
 					<a href="<?= site_url('pembelian/index') ?>" class="btn btn-dark">Kembali</a>

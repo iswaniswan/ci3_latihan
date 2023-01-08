@@ -39,7 +39,7 @@ class ModelPembelian extends CI_Model{
             $where = " WHERE $this->tableName.id=$id ";
         }
 
-        $select = "$this->tableName.id, no_dokumen, tanggal, id_barang, b.nama as nama_barang, b.harga, id_supplier, s.nama as nama_supplier, pd.qty, keterangan";
+        $select = "$this->tableName.id, no_dokumen, $this->tableName.status, tanggal, id_barang, b.nama as nama_barang, b.harga, id_supplier, s.nama as nama_supplier, pd.qty, keterangan";
 
         $query = $this->db->query("SELECT $select FROM $this->tableName $join $where ORDER BY id ASC");
         return $query->result_array();
@@ -68,11 +68,23 @@ class ModelPembelian extends CI_Model{
 
     public function update($params)
     {
-        $data = array(
-            'tanggal' => @$params['tanggal'],
-            'id_supplier' => @$params['id_supplier'],
-			'keterangan' => @$params['keterangan']
-        );
+        $data = [];
+
+		if (@$params['tanggal']) {
+			$data['tanggal'] = $params['tanggal'];
+		}
+		if (@$params['id_supplier']) {
+			$data['id_supplier'] = $params['id_supplier'];
+		}
+		if (@$params['keterangan']) {
+			$data['keterangan'] = $params['keterangan'];
+		}
+		if (@$params['no_dokumen']) {
+			$data['no_dokumen'] = $params['no_dokumen'];
+		}
+		if (@$params['status']) {
+			$data['status'] = $params['status'];
+		}
     
         $this->db->where('id', @$params['id']);
         $this->db->update($this->tableName, $data);

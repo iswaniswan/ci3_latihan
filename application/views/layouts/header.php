@@ -18,4 +18,4 @@
     <script src="<?= base_url('public/assets/js/jquery.dataTables.js') ?>"></script>  
     <title>App</title>
 </head>
-<body class="p-4">
+<body class="">

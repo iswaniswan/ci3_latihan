@@ -74,11 +74,11 @@ class Auth extends CI_Controller {
 			];
 			$this->session->set_userdata($sessionData);
 
-			$this->session->set_flashdata('alert-success', 'Login berhasil.');
+			$this->session->set_flashdata('success', 'Login berhasil.');
 			redirect('barang/index');
 		}
 
-		$this->session->set_flashdata('alert-error', 'Login gagal!');
+		$this->session->set_flashdata('danger', 'Login gagal!');
 		redirect('auth/login');
 	}
 
@@ -96,20 +96,20 @@ class Auth extends CI_Controller {
 		if ($isPasswordValid) {
 			// check username exist
 			if ($this->isUsernamExist($params['username'])) {
-				$this->session->set_flashdata('alert-danger', 'User sudah terdaftar');
+				$this->session->set_flashdata('danger', 'User sudah terdaftar');
 				redirect('auth/register');
 			}
 
 			$this->load->model('ModelUser');
 			if ($this->ModelUser->create($params)) {
 				$message = 'Registrasi berhasil, silakan login';
-				$this->session->set_flashdata('alert-success', $message);
+				$this->session->set_flashdata('success', $message);
 				redirect('auth/login');
 			}
 		}
 
 		$message = 'Register gagal! cek kembali isian anda.';
-		$this->session->set_flashdata('alert-danger', $message);
+		$this->session->set_flashdata('danger', $message);
 		redirect('auth/register');
 	}
 

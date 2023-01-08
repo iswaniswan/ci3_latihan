@@ -1,11 +1,4 @@
 <div class="row">
-	<?php if (@$this->session->flashdata('alert-success')) { ?>
-		<div class="container">
-			<div class="col-12 alert alert-success" role="alert">
-				<?= $this->session->flashdata('alert-success') ?>
-			</div>
-		</div>
-	<?php } ?>
 	<div class="container">
 		<div class="card">
 			<div class="card-header bg-light mb-2">
@@ -68,6 +61,19 @@
 
 <script>
 	$(function() {
+		const instanceSubmitForm = (params) => {
+			let form = $(document.createElement('form'));
+			$(form).attr("action", "<?= site_url('barang/updateStatus') ?>");
+			$(form).attr("method", "POST");
+
+			let inputId = $("<input>").attr("type", "hidden").attr("name", "id").val(params?.id);
+			let inputStatus = $("<input>").attr("type", "hidden").attr("name", "status").val(params?.status);
+			$(form).append($(inputId));
+			$(form).append($(inputStatus));
+			$(document.body).append(form);
+			$(form).submit();
+		};
+
 		$('.bootstrap-toggle').bootstrapToggle();
 
 		$('.bootstrap-toggle').each(function() {
@@ -75,28 +81,13 @@
 				const status = $(this).prop('checked');
 				const id = $(this).data('id');
 				console.log(id, status);
-				$.ajax({
-					'url': "<?= site_url('barang/updateStatus') ?>",
-					'method': 'POST',
-					'data': {
-						id: id,
-						status:status
-					},
-					success: function(result){
-						if (result === 'success') {
-							location.reload();
-						}
-					}
-				})
+				const params = { id: id, status: status };
+				instanceSubmitForm(params);
 			})
 		})
 	})
 
 	$(document).ready(function() {
 		$('table').dataTable();
-
-		setTimeout(() => {
-			$('.alert').fadeOut();
-		}, 1000)
 	})
 </script>

@@ -1,21 +1,16 @@
 <div class="row align-items-center g-lg-5 py-5">
-	<?php if (@$this->session->flashdata('alert-danger')) { ?>
-		<div class="container">
-			<div class="col-12 alert alert-danger" role="alert">
-				<?= $this->session->flashdata('alert-danger') ?>
+	<?php if (@$this->session->flashdata()) {
+		foreach ($this->session->flashdata() as $key => $value) { ?>
+			<div class="container">
+				<div class="col-12 alert alert-<?=$key?> px-lg-5 px-md-4 px-sm-1 text-center" role="alert">
+					<?= $this->session->flashdata($key) ?>
+				</div>
 			</div>
-		</div>
-	<?php } ?>
-	<?php if (@$this->session->flashdata('alert-success')) { ?>
-		<div class="container">
-			<div class="col-12 alert alert-danger" role="alert">
-				<?= $this->session->flashdata('alert-success') ?>
-			</div>
-		</div>
-	<?php } ?>
-	<div class="col-lg-7 text-center text-lg-start">
+		<?php }
+	} ?>
+	<div class="col-lg-6 text-center">
 		<h1 class="display-4 fw-bold lh-1 mb-3">App Latihan</h1>
-		<p class="col-lg-10 fs-4">Silakan registrasi untuk menggunakan aplikasi</p>
+		<p class="col-12 fs-4">Silakan registrasi untuk menggunakan aplikasi</p>
 	</div>
 	<div class="col-md-10 mx-auto col-lg-5">
 		<form class="p-4 p-md-5 border rounded-3 bg-light" action="<?= site_url('auth/register') ?>" method="post">
@@ -33,7 +28,7 @@
 			</div>
 			<button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
 			<hr class="my-4">
-			<small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
+			<div class="text-muted text-center">Sudah punya akun? <a href="<?= site_url('auth/login') ?>">LOGIN</a></div>
 		</form>
 	</div>
 </div>

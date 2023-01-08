@@ -27,8 +27,11 @@
                     </div>
                     <a href="<?= site_url('barang/index') ?>" class="btn btn-dark">
                         Kembali
-                    </a>                        
-                </form>
+                    </a>
+					<a href="<?= site_url('barang/update/'. $data['id']) ?>" class="btn btn-warning">
+						Ubah
+					</a>
+				</form>
             </div>
         </div>
     </div>

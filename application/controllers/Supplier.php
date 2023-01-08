@@ -34,6 +34,7 @@ class Supplier extends BaseController {
 			];
 
 			if ($this->ModelSupplier->create($params)) {
+				$this->session->set_flashdata('success', 'Supplier berhasil disimpan.');
 				redirect('supplier/index');
 			} else {
 				echo 'error';
@@ -69,6 +70,7 @@ class Supplier extends BaseController {
 			];
 						
 			if ($this->ModelSupplier->update($params)) {
+				$this->session->set_flashdata('success', 'Update supplier berhasil.');
 				redirect('supplier/index');
 			} else {
 				echo 'error';
@@ -86,11 +88,12 @@ class Supplier extends BaseController {
 	{
 		if ($id != null) {
 			if ($this->ModelSupplier->delete($id)) {
-				redirect ('supplier/index');
+				$this->session->set_flashdata('success', 'Hapus supplier berhasil.');
 			} else {
-				echo 'Error';
+				$this->session->set_flashdata('danger', 'Gagal hapus supplier.');
 			}
-		}		
+		}
+		redirect ('supplier/index');
 	}
 
 	public function updateStatus()
@@ -102,10 +105,9 @@ class Supplier extends BaseController {
 				'status'=> @$post['status']
 			];
 			$this->ModelSupplier->update($params);
-			echo 'success';			
-		} else {
-			echo 'error';
+			$this->session->set_flashdata('success', 'Update status berhasil.');
 		}
+		redirect('supplier/index');
 	}
 
 }

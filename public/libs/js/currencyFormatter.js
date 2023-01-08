@@ -1,10 +1,11 @@
 // format number 1000000 to 1,234,567
 const FormatNumber = (n) => {
-    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
   
   
 const FormatCurrency = (input, blur, prefix) => {
+
     var input_val = input.val();
 
     if (input_val === "") {

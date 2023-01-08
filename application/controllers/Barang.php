@@ -32,14 +32,16 @@ class Barang extends BaseController {
 			if (@$post['status'] == 'on') {
 				$status = true;
 			}
+			$harga = $this->currencyToInt(@$post['harga']);
 			$params = [
 				'kode' => @$post['kode'],
 				'nama' => @$post['nama'],
-				'harga' => @$post['harga'],
+				'harga' => $harga,
 				'status' => $status
 			];
 
 			if ($this->ModelBarang->create($params)) {
+				$this->session->set_flashdata('success', 'Barang berhasil disimpan.');
 				redirect('barang/index');
 			} else {
 				echo 'error';
@@ -91,9 +93,8 @@ class Barang extends BaseController {
 			];
 			
 			if ($this->ModelBarang->update($params)) {
+				$this->session->set_flashdata('success', 'Update barang berhasil.');
 				redirect('barang/index');
-			} else {
-				echo 'error';
 			}
 		}	
 
@@ -108,11 +109,12 @@ class Barang extends BaseController {
 	{
 		if ($id != null) {
 			if ($this->ModelBarang->delete($id)) {
-				redirect ('barang/index');
+				$this->session->set_flashdata('success', 'Hapus barang berhasil.');
 			} else {
-				echo 'Error';
+				$this->session->set_flashdata('danger', 'Gagal hapus barang.');
 			}
-		}		
+		}
+		redirect ('barang/index');
 	}
 
 	public function updateStatus()
@@ -123,11 +125,11 @@ class Barang extends BaseController {
 				'id' => @$post['id'],
 				'status'=> @$post['status']
 			];
-			$this->ModelBarang->update($params);
-			echo 'success';			
-		} else {
-			echo 'error';
+			if ($this->ModelBarang->update($params)) {
+				$this->session->set_flashdata('success', 'Update status berhasil.');
+			}
 		}
+		redirect('barang/index');
 	}
 
 	public function getHargaBarang()

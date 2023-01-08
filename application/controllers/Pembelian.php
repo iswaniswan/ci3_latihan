@@ -54,7 +54,6 @@ class Pembelian extends BaseController {
 				'keterangan' => @$post['keterangan'],
 				'no_dokumen' => $this->generateNumberDocument(@$post['tanggal'])
 			];
-
 			
 			$last_id_inserted = $this->ModelPembelian->create($params);
 
@@ -73,21 +72,22 @@ class Pembelian extends BaseController {
 					$data['id_pembelian'] = $last_id_inserted;
 					if (!$this->ModelPembelianDetail->create($data)) {					
 						$success = false;
-					}					// echo '<pre>'; var_dump($params['qty']); echo '</pre>';
+					}
+					// echo '<pre>'; var_dump($params['qty']); echo '</pre>';
 				}
 				
 				if ($success) {
 					// return redirect('pembelian/read/'.$last_id_inserted);
-//					var_dump($params);
+					// var_dump($params);
 					$message = 'Nomor dokumen '. $params['no_dokumen'] . ' berhasil tersimpan.';
-					$this->session->set_flashdata('alert-success', $message);
+					$this->session->set_flashdata('success', $message);
 					redirect('pembelian/read/'.$last_id_inserted);
 				} else {
-					die ('error pembelian detail');
+					$this->session->set_flashdata('danger', 'Error detail pembelian');
 				}
 
 			} else {
-				echo 'error Pembelian';
+				$this->session->set_flashdata('danger', 'Gagal menambah pembelian');
 			}
 		}
 
@@ -159,7 +159,9 @@ class Pembelian extends BaseController {
 				'id' => @$post['id'],
 				'tanggal' => @$post['tanggal'],
 				'id_supplier' => @$post['id_supplier'],
-				'keterangan' => @$post['keterangan']
+				'keterangan' => @$post['keterangan'],
+				'no_dokumen' => @$post['no_dokumen'],
+				'status' => @$post['status']
 			];
 						
 			if ($this->ModelPembelian->update($params)) {
@@ -184,11 +186,8 @@ class Pembelian extends BaseController {
 					$this->ModelPembelianDetail->create($data);
 					// echo '<pre>'; var_dump($params['qty']); echo '</pre>';
 				}
-				$this->session->set_flashdata('alert-success', 'Update berhasil');
-				redirect('pembelian/read/'.$post['id']);
-
-			} else {
-				echo 'error';
+				$this->session->set_flashdata('success', 'Update berhasil');
+				redirect('pembelian/index');
 			}
 		}
 
@@ -217,11 +216,10 @@ class Pembelian extends BaseController {
 				// delete pembelian detail
 				$this->load->model('ModelPembelianDetail');
 				$this->ModelPembelianDetail->deleteBy('id_pembelian', $id);
-				redirect ('pembelian/index');
-			} else {
-				echo 'Error';
+				$this->session->set_flashdata('success', 'Hapus data berhasil.');
 			}
-		}		
+		}
+		redirect ('pembelian/index');
 	}
 
 	private function getCountPembelian($periode=null)
@@ -279,11 +277,11 @@ class Pembelian extends BaseController {
 				'id' => @$post['id'],
 				'status'=> @$post['status']
 			];
-			$this->ModelPembelian->update($params);
-			echo 'success';
-		} else {
-			echo 'error';
+			if ($this->ModelPembelian->update($params)) {
+				$this->session->set_flashdata('success', 'Update status berhasil.');
+			}
 		}
+		redirect ('pembelian/index');
 	}
 
 }
