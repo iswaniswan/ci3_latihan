@@ -192,6 +192,8 @@ class Pembelian extends BaseController {
 		}
 
 		$data = $this->ModelPembelian->getAllWithDetail($id)[0];
+		$canUpdateStatus = $this->canUpdateStatus($data);
+		$data['canUpdateStatus'] = $canUpdateStatus;
 
 		$select = "pembelian_detail.id, pembelian_detail.id_pembelian, pembelian_detail.id_barang, pembelian_detail.qty, pembelian_detail.harga";
 		$join = " INNER JOIN barang b ON b.id=pembelian_detail.id_barang ";

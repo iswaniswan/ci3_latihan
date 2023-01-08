@@ -1,6 +1,6 @@
 <?php /** @var string $active */ ?>
 
-<nav class="navbar navbar-expand-lg mb-3 pt-3" style="background-color: #e3f2fd;">
+<nav class="navbar navbar-expand-lg mb-3 pt-3" style="background-color: #e3f2fd; border-bottom: 1px solid #ddd;">
 	<div class="container-fluid">
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>

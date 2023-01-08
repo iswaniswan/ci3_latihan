@@ -31,9 +31,15 @@
 						<textarea type="text" class="form-control" name="keterangan"><?= $data['keterangan'] ?></textarea>
 					</div>
 					<div class="mb-3">
+						<?php $disabled = 'disabled'; $onsytle = 'disabled';
+						if ($data['canUpdateStatus']) {
+							$disabled = '';
+							$onsytle = 'success';
+						}
+						?>
 						<label class="form-label">Status</label>
 						<?php $checked = $data['status'] == 't' ? 'checked' : ''; ?>
-						<input type="checkbox" class="form-check-input mt-1" name="status" <?= $checked ?> data-id="<?= $data['id'] ?>">
+						<input type="checkbox" class="form-check-input mt-1" name="status" <?= $checked ?> data-id="<?= $data['id'] ?>" <?= $disabled ?>>
 					</div>
 					<input type="hidden" name="id" value="<?= $data['id'] ?>" />
 					<button type="submit" class="btn btn-primary">Submit</button>
@@ -117,6 +123,12 @@
 		</form>
 	</div>
 </div>
+<style>
+	.form-check-input:disabled {
+		pointer-events: unset;
+		cursor: not-allowed !important;
+	}
+</style>
 
 <script type="text/javascript" src="<?= base_url('public/libs/js/terbilang.js') ?>"></script>
 <script type="text/javascript" src="<?= base_url('public/libs/js/currencyFormatter.js') ?>"></script>
