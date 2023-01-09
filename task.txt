@@ -22,7 +22,14 @@
 - cek bug harga koma seletah hapus item.
 - perhitungan harga mengambil dari data transaksi.
 - user login.
+- tambah status pembelian dengan ketentuan jika bulan sudah lewat, tidak bisa di ubah statusnya.
 
+
+2023-08-01
+- urut berdasarkan tgl terbaru
+- buat menu laporan, date range , supplier (all, selected)
+- no| nama supplier| tgl pembelian| kode barang| nama barang| qty| harga satuan | subtotal|
+- laporan bisa di export ke excel (phpexcel/ php spreadsheet)
 
 
 

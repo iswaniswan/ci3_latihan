@@ -57,21 +57,9 @@
 	</div>
 </div>
 
+<script type="text/javascript" src="<?= base_url('public/libs/js/instanceSubmitForm.js') ?>"></script>
 <script>
 	$(function() {
-		const instanceSubmitForm = (params) => {
-			let form = $(document.createElement('form'));
-			$(form).attr("action", "<?= site_url('supplier/updateStatus') ?>");
-			$(form).attr("method", "POST");
-
-			let inputId = $("<input>").attr("type", "hidden").attr("name", "id").val(params?.id);
-			let inputStatus = $("<input>").attr("type", "hidden").attr("name", "status").val(params?.status);
-			$(form).append($(inputId));
-			$(form).append($(inputStatus));
-			$(document.body).append(form);
-			$(form).submit();
-		};
-
 		$('.bootstrap-toggle').bootstrapToggle();
 
 		$('.bootstrap-toggle').each(function() {
@@ -79,8 +67,16 @@
 				const status = $(this).prop('checked');
 				const id = $(this).data('id');
 				console.log(id, status);
-				const params = { id: id, status: status };
-				instanceSubmitForm(params);
+				// const params = { id: id, status: status };
+				let params = {
+					'action': "<?= site_url('supplier/update-status') ?>",
+					'method': 'post',
+					'inputs': [
+						{'name': 'id', 'value': id},
+						{'name': 'status', 'value': status}
+					]
+				};
+				InstanceSubmitForm(params);
 			})
 		})
 	})

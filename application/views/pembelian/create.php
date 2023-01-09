@@ -359,7 +359,6 @@
 			}
         });
 
-
         $('input.quantity-input').each(function() {
             $(this).on('keyup', function () {
                 fillElementTotal($(this));

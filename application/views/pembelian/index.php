@@ -71,22 +71,11 @@
 <style>
 	.btn-disabled, .toggle:disabled:hover {
 		cursor: not-allowed !important;
+		background-color: #6c757d !important;
 	}
 </style>
+<script type="text/javascript" src="<?= base_url('public/libs/js/instanceSubmitForm.js') ?>"></script>
 <script>
-	const instanceSubmitForm = (params) => {
-		let form = $(document.createElement('form'));
-		$(form).attr("action", "<?= site_url('pembelian/updateStatus') ?>");
-		$(form).attr("method", "POST");
-
-		let inputId = $("<input>").attr("type", "hidden").attr("name", "id").val(params?.id);
-		let inputStatus = $("<input>").attr("type", "hidden").attr("name", "status").val(params?.status);
-		$(form).append($(inputId));
-		$(form).append($(inputStatus));
-		$(document.body).append(form);
-		$(form).submit();
-	};
-
 	$(document).ready(function() {
 		$('table').dataTable();
 
@@ -95,8 +84,15 @@
 				const status = $(this).prop('checked');
 				const id = $(this).data('id');
 				console.log(id, status);
-				const params = { id: id, status: status };
-				instanceSubmitForm(params);
+				let params = {
+					'action': "<?= site_url('pembelian/update-status') ?>",
+					'method': 'post',
+					'inputs': [
+						{'name': 'id', 'value': id},
+						{'name': 'status', 'value': status}
+					]
+				};
+				InstanceSubmitForm(params);
 			})
 		});
 

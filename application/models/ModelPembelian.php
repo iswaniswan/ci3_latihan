@@ -10,7 +10,8 @@ class ModelPembelian extends CI_Model{
     {
         $select = "$this->tableName.id, tanggal, no_dokumen, keterangan, s.nama as nama_supplier, $this->tableName.status";
         $join = "INNER JOIN supplier s ON s.id=$this->tableName.id_supplier::integer ";
-		$order = "ORDER BY id ASC";
+//		$order = "ORDER BY id ASC";
+		$order = "ORDER BY tanggal desc";
 		$where = '';
 		if (@$params['count'] != null) {
 			$select = "count($this->tableName.id)";
@@ -21,6 +22,9 @@ class ModelPembelian extends CI_Model{
 		}
 		if (@$params['join'] != null) {
 			$join = $params['join'];
+		}
+		if (@$params['order'] != null) {
+			$order = $params['order'];
 		}
 
 		$sql = "SELECT $select FROM $this->tableName $join $where $order";
