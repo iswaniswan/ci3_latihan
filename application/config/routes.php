@@ -55,3 +55,4 @@ $route['translate_uri_dashes'] = FALSE;
 $route['barang/update-status'] = 'barang/updateStatus';
 $route['supplier/update-status'] = 'supplier/updateStatus';
 $route['pembelian/update-status'] = 'pembelian/updateStatus';
+$route['laporan/export-excel'] = 'laporan/exportExcel';

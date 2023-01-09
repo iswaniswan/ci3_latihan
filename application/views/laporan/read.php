@@ -8,9 +8,15 @@
 			</div>
 			<div class="card-body">
 				<div class="col-12 mb-5">
-					<a href="<?= site_url('laporan/export') ?>" class="btn btn-success">
-						<i class="bi-file-earmark-excel-fill me-2"></i>Export
-					</a>
+					<form action="<?= site_url('laporan/generate') ?>" method="post">
+						<input type="hidden" name="tanggal_mulai" value="<?= @$post['tanggal_mulai'] ?>">
+						<input type="hidden" name="tanggal_akhir" value="<?= @$post['tanggal_akhir'] ?>">
+						<input type="hidden" name="id_supplier" value="<?= @$post['id_supplier'] ?>">
+						<input type="hidden" name="export_excel" value="true">
+						<button type="submit" class="btn btn-success">
+							<i class="bi-file-earmark-excel-fill me-2"></i>Export
+						</button>
+					</form>
 				</div>
 				<div class="col-12">
 					<?php $no = 1; ?>
@@ -20,7 +26,7 @@
 							<th scope="col" rowspan="2">#</th>
 							<th scope="col" rowspan="2">Nama Supplier</th>
 							<th scope="col" rowspan="2">Tanggal</th>
-							<th scope="col" rowspan="2">No Dokumen</th>
+							<th scope="col" rowspan="2">No. Dokumen</th>
 							<th scope="col" colspan="2" style="text-align: center">Barang</th>
 							<th scope="col" rowspan="2">Quantity</th>
 							<th scope="col" rowspan="2">Harga Satuan</th>

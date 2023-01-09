@@ -37,11 +37,11 @@ class ModelLaporan extends CI_Model{
 			$where = " WHERE p.tanggal >= '$tanggalMulai' AND p.tanggal <= '$tanggalAkhir' ";
 		}
 
-		if (@$params['supplier'] != null) {
+		if (@$params['id_supplier'] != null) {
 			if ($where != '') {
-				$where .= " AND p.id_supplier::integer=".$params['supplier'];
+				$where .= " AND p.id_supplier::integer=".$params['id_supplier'];
 			} else {
-				$where = " WHERE p.id_supplier::integer=".$params['supplier'];
+				$where = " WHERE p.id_supplier::integer=".$params['id_supplier'];
 			}
 		}
 

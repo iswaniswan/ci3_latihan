@@ -1,5 +1,8 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+require 'vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 require 'BaseController.php';
 class Laporan extends BaseController {
@@ -41,144 +44,86 @@ class Laporan extends BaseController {
 		$params = [
 			'tanggal_mulai' => @$post['tanggal_mulai'],
 			'tanggal_akhir' => @$post['tanggal_akhir'],
-			'id_supplier' => @$post['id_supplier']
+			'id_supplier' => @$post['id_supplier'],
 		];
 		$allData = $this->ModelLaporan->getAll($params);
 
+		if (@$post['export_excel']) {
+//			echo '<pre>'; var_dump($allData); echo '</pre>';
+			$supplier = '';
+			if (intval($params['id_supplier']) > 0){
+				$getSupplier = $this->getSupplier(['id_supplier' => $params['id_supplier']]);
+				$supplier = $getSupplier['nama'] . '_';
+			}
+			$filename = 'Laporan_pembelian_' . $supplier .$params['tanggal_mulai'].'-'.$params['tanggal_akhir'] . '.xlsx';
+			return $this->exportExcel($allData, $filename);
+		}
+
 		$this->render('laporan/read', [
-			'allData' => $allData
+			'allData' => $allData,
+			'post' => $post
 		]);
 	}
 
-	public function create()
+	public function exportExcel($allData=[], $filename=null)
 	{
-		$post = $this->input->post();
-		if ($post != null) {
-			$status = 'false';
-			if (@$post['status'] == 'on') {
-				$status = true;
-			}
-			$harga = $this->currencyToInt(@$post['harga']);
-			$params = [
-				'kode' => @$post['kode'],
-				'nama' => @$post['nama'],
-				'harga' => $harga,
-				'status' => $status
-			];
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
 
-			if ($this->ModelBarang->create($params)) {
-				$this->session->set_flashdata('success', 'Barang berhasil disimpan.');
-				redirect('barang/index');
-			} else {
-				echo 'error';
+		$sheet->setCellValue('A1', "NO");
+		$sheet->setCellValue('B1', "NAMA SUPPLIER");
+		$sheet->setCellValue('C1', "TANGGAL");
+		$sheet->setCellValue('D1', "NO. DOKUMEN");
+		$sheet->setCellValue('E1', "KODE");
+		$sheet->setCellValue('F1', "NAMA");
+		$sheet->setCellValue('G1', "QUANTITY");
+		$sheet->setCellValue('H1', "HARGA SATUAN");
+		$sheet->setCellValue('I1', "SUBTOTAL");
+
+		$no=1;
+		$row=2;
+		foreach ($allData as $data) {
+			$sheet->setCellValue('A'.$row, $no++);
+			$sheet->setCellValue('B'.$row, $data['nama_supplier']);
+			$sheet->setCellValue('C'.$row, $data['tanggal']);
+			$sheet->setCellValue('D'.$row, $data['no_dokumen']);
+			$sheet->setCellValue('E'.$row, $data['kode_barang']);
+			$sheet->setCellValue('F'.$row, $data['nama_barang']);
+			$sheet->setCellValue('G'.$row, $data['qty']);
+			$sheet->setCellValue('H'.$row, 'Rp. ' . number_format($data['harga_satuan'], 2, ".", ","));
+			$sheet->setCellValue('I'.$row, 'Rp. ' . number_format($data['subtotal'], 2, ".", ",") );
+			$row++;
+		}
+
+		$sheet->getDefaultRowDimension()->setRowHeight(-1);
+		$sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+		$sheet->setTitle("Laporan Data Siswa");
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+		if ($filename == null) {
+			$filename = "Laporan_pembelian_.xlsx";
+		}
+
+		header('Content-Disposition: attachment; filename="'. $filename . '"');
+		header('Cache-Control: max-age=0');
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('php://output');
+	}
+
+	private function getSupplier($params=[])
+	{
+		$this->load->model('ModelSupplier');
+		$allSupplier = $this->ModelSupplier->getAll();
+
+		if (@$params['id_supplier'] != null) {
+			foreach ($allSupplier as $supplier) {
+				if ($supplier['id'] == $params['id_supplier']) {
+					return $supplier;
+				}
 			}
 		}
 
-		$this->render('barang/create');
-	}
-
-	public function read($id) 
-	{
-		$data = $this->ModelBarang->read($id);
-
-		$this->render('barang/read', [
-			'data' => $data
-		]);
-	}
-
-	public function currencyToInt($str='')
-	{
-		// hapus prefix Rp.
-		$str = str_replace("Rp.", "", $str);
-		
-		// hapus 2 digit dibelakang titik
-		$str = str_replace(".00", "", $str);
-
-		// hapus comma
-		$str = str_replace(",", "", $str);
-		return $str;
-	}
-
-	public function update($id=null)
-	{
-		// action  post submit
-		$post = $this->input->post();
-		if ($post != null) {
-			// var_dump($post); die();
-			$status = 'false';
-			if (@$post['status'] == 'on') {
-				$status = true;
-			}
-			$harga = $this->currencyToInt(@$post['harga']);
-			$params = [
-				'id' => @$post['id'],
-				'kode' => @$post['kode'],
-				'nama' => @$post['nama'],
-				'harga' => $harga,
-				'status' => $status
-			];
-			
-			if ($this->ModelBarang->update($params)) {
-				$this->session->set_flashdata('success', 'Update barang berhasil.');
-				redirect('barang/index');
-			}
-		}	
-
-		$data = $this->ModelBarang->read($id);
-
-		$this->render('barang/update', [
-			'data' => $data
-		]);
-	}
-
-	public function delete($id)
-	{
-		if ($id != null) {
-			if ($this->ModelBarang->delete($id)) {
-				$this->session->set_flashdata('success', 'Hapus barang berhasil.');
-			} else {
-				$this->session->set_flashdata('danger', 'Gagal hapus barang.');
-			}
-		}
-		redirect ('barang/index');
-	}
-
-	public function updateStatus()
-	{
-		$post = $this->input->post();
-		if ($post != null) {
-			$params = [
-				'id' => @$post['id'],
-				'status'=> @$post['status']
-			];
-			if ($this->ModelBarang->update($params)) {
-				$this->session->set_flashdata('success', 'Update status berhasil.');
-			}
-		}
-		redirect('barang/index');
-	}
-
-	public function getHargaBarang()
-	{
-		$data = [];
-
-		$post = $this->input->post();
-		if (!$post) {
-			return data;
-		}
-		$id_barang = $post['id_barang'];
-
-		$allBarang = $this->ModelBarang->getAll();
-		foreach ($allBarang as $barang) {
-			$data['id'] = $barang['id'];
-			$data['value'] = $barang['harga'];
-
-			if ($id_barang == $data['id']) {				
-				echo $barang['harga'];
-			}
-		}
-
-		return $data;
+		return $allSupplier;
 	}
 
 }
